@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    <style name="custom_mode_buttons"Widget.MaterialComponents.Button.OutlinedButto parent="Widget.MaterialComponents.Button.UnelevatedButton">-->
+    <style name="custom_mode_buttons" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+
+        <item name="shapeAppearance">@style/MyShapeAppearance</item>
+    </style>
+    <style name="MyShapeAppearance">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyTopRight">rounded</item>
+        <item name="cornerFamilyBottomRight">rounded</item>
+<!--        <item name="android:backgroundTint">@color/colorSurface</item>-->
+        <item name="cornerSize">12dp</item>
+<!--        <item name="android:textColor">@color/buttonTextColor</item>-->
+    </style>
+</resources>
