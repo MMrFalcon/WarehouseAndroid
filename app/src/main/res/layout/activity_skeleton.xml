@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarStyle="outsideOverlay"
+    tools:context=".SkeletonActivity">
+
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/custom_card_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardPreventCornerOverlap="true"
+        app:layout_anchorGravity="center">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/skeletonInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="Skeleton Info" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/skeletonName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/skeletonInfo"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="TextView" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/skeletonAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/skeletonName"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="TextView" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/loadSkeleton"
+                style="@style/custom_mode_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/skeletonAge"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="Show Me!" />
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</ScrollView>
