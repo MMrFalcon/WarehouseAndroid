@@ -4,19 +4,20 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
+import com.falcon.warehouse.contract.IWalkingSkeletonContract;
 import com.falcon.warehouse.entity.Skeleton;
 import com.falcon.warehouse.root.App;
-import com.falcon.warehouse.service.IWalkingSkeleton;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import javax.inject.Inject;
 
-public class SkeletonActivity extends AppCompatActivity implements IWalkingSkeleton.View {
+public class SkeletonActivity extends AppCompatActivity implements IWalkingSkeletonContract.View {
 
     @Inject
-    IWalkingSkeleton.Presenter presenter;
+    IWalkingSkeletonContract.Presenter presenter;
 
     private MaterialTextView skeletonName;
     private MaterialTextView skeletonAge;
@@ -56,9 +57,11 @@ public class SkeletonActivity extends AppCompatActivity implements IWalkingSkele
     }
 
     @Override
-    public void setSkeletonToTextView(Skeleton skeleton) {
-        skeletonName.setText(String.valueOf(skeleton.getName()));
-        skeletonAge.setText(String.valueOf(skeleton.getAge()));
+    public void setSkeletonToTextView(LiveData<Skeleton> skeleton) {
+        skeleton.observe(this, skeleton1 -> {
+            skeletonName.setText(skeleton1.getName());
+            skeletonAge.setText(String.valueOf(skeleton1.getAge()));
+        });
     }
 
     @Override

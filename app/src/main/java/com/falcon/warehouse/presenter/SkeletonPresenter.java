@@ -1,19 +1,21 @@
 package com.falcon.warehouse.presenter;
 
+import androidx.lifecycle.LiveData;
+
+import com.falcon.warehouse.contract.IWalkingSkeletonContract;
 import com.falcon.warehouse.entity.Skeleton;
-import com.falcon.warehouse.service.IWalkingSkeleton;
 
-public class SkeletonPresenter implements IWalkingSkeleton.Presenter {
+public class SkeletonPresenter implements IWalkingSkeletonContract.Presenter {
 
-    private IWalkingSkeleton.View view;
-    private IWalkingSkeleton.Model model;
+    private IWalkingSkeletonContract.View view;
+    private IWalkingSkeletonContract.Model model;
 
-    public SkeletonPresenter(IWalkingSkeleton.Model model) {
+    public SkeletonPresenter(IWalkingSkeletonContract.Model model) {
         this.model = model;
     }
 
     @Override
-    public void setView(IWalkingSkeleton.View view) {
+    public void setView(IWalkingSkeletonContract.View view) {
         this.view = view;
     }
 
@@ -24,8 +26,9 @@ public class SkeletonPresenter implements IWalkingSkeleton.Presenter {
 
     @Override
     public void setSkeletonToTextView() {
-        Skeleton skeleton = model.getSkeleton();
-        view.setSkeletonToTextView(skeleton);
+        LiveData<Skeleton> skeletonLiveData = model.getSkeletonByName(view.getName());
+        view.setSkeletonToTextView(skeletonLiveData);
         view.showMessage();
     }
+
 }

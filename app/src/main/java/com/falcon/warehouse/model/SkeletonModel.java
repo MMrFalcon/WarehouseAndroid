@@ -1,10 +1,12 @@
 package com.falcon.warehouse.model;
 
+import androidx.lifecycle.LiveData;
+
+import com.falcon.warehouse.contract.IWalkingSkeletonContract;
 import com.falcon.warehouse.entity.Skeleton;
 import com.falcon.warehouse.repository.SkeletonRepository;
-import com.falcon.warehouse.service.IWalkingSkeleton;
 
-public class SkeletonModel implements IWalkingSkeleton.Model {
+public class SkeletonModel implements IWalkingSkeletonContract.Model {
 
     private SkeletonRepository skeletonRepository;
 
@@ -13,12 +15,14 @@ public class SkeletonModel implements IWalkingSkeleton.Model {
     }
 
     @Override
-    public Skeleton createSkeleton(String name, int age) {
-        return skeletonRepository.createSkeleton(name, age);
+    public LiveData<Skeleton> createSkeleton(String name, int age) {
+        Skeleton skeleton = new Skeleton(name, age);
+        skeletonRepository.insertSkeleton(skeleton);
+        return skeletonRepository.findSkeletonByName(name);
     }
 
     @Override
-    public Skeleton getSkeleton() {
-        return skeletonRepository.getSkeleton();
+    public LiveData<Skeleton> getSkeletonByName(String skeletonName) {
+        return skeletonRepository.findSkeletonByName(skeletonName);
     }
 }

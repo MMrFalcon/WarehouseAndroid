@@ -1,11 +1,9 @@
 package com.falcon.warehouse.repository;
 
-import com.falcon.warehouse.entity.Skeleton;
+import com.falcon.warehouse.dao.SkeletonDao;
 
-public interface SkeletonRepository {
 
-    Skeleton createSkeleton(String name, int age);
+public interface SkeletonRepository extends SkeletonDao {
 
-    Skeleton getSkeleton();
 
 }

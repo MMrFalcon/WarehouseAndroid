@@ -1,18 +1,20 @@
-package com.falcon.warehouse.service;
+package com.falcon.warehouse.contract;
+
+import androidx.lifecycle.LiveData;
 
 import com.falcon.warehouse.entity.Skeleton;
 
-public interface IWalkingSkeleton {
+public interface IWalkingSkeletonContract {
 
     interface Model {
-        Skeleton createSkeleton(String name, int age);
-        Skeleton getSkeleton();
+        LiveData<Skeleton> createSkeleton(String name, int age);
+        LiveData<Skeleton> getSkeletonByName(String skeletonName);
     }
 
     interface View {
         String getName();
         int getAge();
-        void setSkeletonToTextView(Skeleton skeleton);
+        void setSkeletonToTextView(LiveData<Skeleton> skeleton);
         void showMessage();
     }
 

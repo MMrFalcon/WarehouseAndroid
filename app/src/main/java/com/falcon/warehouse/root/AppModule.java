@@ -1,7 +1,6 @@
 package com.falcon.warehouse.root;
 
 import android.app.Application;
-import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -19,7 +18,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public Context provideContext() {
+    public Application provideApplication() {
         return application;
     }
 }

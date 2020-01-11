@@ -22,9 +22,10 @@ public class MainActivity extends AppCompatActivity  {
         final MaterialButton offline = findViewById(R.id.offlineButton);
         final MaterialButton online = findViewById(R.id.onlineButton);
 
-        offline.setOnClickListener(v -> Toast.makeText(this, "OFFLINE", Toast.LENGTH_LONG).show());
+        offline.setOnClickListener(v -> startActivity(new Intent(this, SkeletonActivity.class)));
 
-        online.setOnClickListener(v -> startActivity(new Intent(this, SkeletonActivity.class)));
+
+        online.setOnClickListener(v ->  Toast.makeText(this, "ONLINE", Toast.LENGTH_LONG).show());
 
     }
 
