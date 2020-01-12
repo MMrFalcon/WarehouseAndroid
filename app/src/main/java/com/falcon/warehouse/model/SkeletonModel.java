@@ -8,7 +8,7 @@ import com.falcon.warehouse.repository.SkeletonRepository;
 
 public class SkeletonModel implements IWalkingSkeletonContract.Model {
 
-    private SkeletonRepository skeletonRepository;
+    private final SkeletonRepository skeletonRepository;
 
     public SkeletonModel(SkeletonRepository skeletonRepository) {
         this.skeletonRepository = skeletonRepository;

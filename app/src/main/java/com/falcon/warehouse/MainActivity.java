@@ -2,7 +2,6 @@ package com.falcon.warehouse;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,8 +23,7 @@ public class MainActivity extends AppCompatActivity  {
 
         offline.setOnClickListener(v -> startActivity(new Intent(this, SkeletonActivity.class)));
 
-
-        online.setOnClickListener(v ->  Toast.makeText(this, "ONLINE", Toast.LENGTH_LONG).show());
+        online.setOnClickListener(v ->  startActivity(new Intent(this, LocalisationActivity.class)));
 
     }
 

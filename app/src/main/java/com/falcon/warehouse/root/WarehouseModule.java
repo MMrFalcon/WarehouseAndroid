@@ -4,14 +4,24 @@ import android.app.Application;
 
 import androidx.room.Room;
 
+import com.falcon.warehouse.dao.LocalisationDao;
 import com.falcon.warehouse.dao.SkeletonDao;
+import com.falcon.warehouse.repository.LocalisationRepository;
 import com.falcon.warehouse.repository.SkeletonRepository;
+import com.falcon.warehouse.repository.impl.LocalisationRepositoryImpl;
 import com.falcon.warehouse.repository.impl.SkeletonRepositoryImpl;
+import com.falcon.warehouse.service.LocalisationService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import retrofit2.Retrofit;
 
 @Module
 public class WarehouseModule {
@@ -35,6 +45,12 @@ public class WarehouseModule {
 
     @Singleton
     @Provides
+    public Gson provideGson() {
+        return new GsonBuilder().create();
+    }
+
+    @Singleton
+    @Provides
     public SkeletonDao provideSkeletonDao(WarehouseDatabase warehouseDatabase) {
         return warehouseDatabase.getSkeletonDao();
     }
@@ -43,6 +59,33 @@ public class WarehouseModule {
     @Provides
     public SkeletonRepository provideSkeletonRepo(SkeletonDao skeletonDao) {
         return new SkeletonRepositoryImpl(skeletonDao);
+    }
+
+    @Singleton
+    @Provides
+    public Executor provideExecutor() {
+        return Executors.newSingleThreadExecutor();
+    }
+
+    @Singleton
+    @Provides
+    public LocalisationDao provideLocalisationDao(WarehouseDatabase warehouseDatabase) {
+        return warehouseDatabase.getLocalisationDao();
+    }
+
+
+    @Singleton
+    @Provides
+    public LocalisationService provideLocalisaionApiService(Retrofit apiAdapter) {
+        return apiAdapter.create(LocalisationService.class);
+    }
+
+    @Singleton
+    @Provides
+    public LocalisationRepository provideLocalisationRepo(LocalisationDao localisationDao,
+                                                          LocalisationService localisationService,
+                                                          Executor executor) {
+        return new LocalisationRepositoryImpl(localisationDao, localisationService, executor);
     }
 
 }
