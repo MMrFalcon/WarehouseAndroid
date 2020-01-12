@@ -42,7 +42,13 @@ public class LocalisationActivity extends AppCompatActivity implements ILocalisa
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.setView(this);
+        presenter.attachView(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.detachView(this);
     }
 
     @Override

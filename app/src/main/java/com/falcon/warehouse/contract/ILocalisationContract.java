@@ -18,9 +18,7 @@ public interface ILocalisationContract {
         void setLocalisationName(String localisationName);
     }
 
-    //todo add detach view method and add base Presenter interface for this methods
-    interface Presenter {
-        void setView(View view);
+    interface Presenter extends BasePresenter<View> {
         void setLocalisationToTextView();
     }
 }

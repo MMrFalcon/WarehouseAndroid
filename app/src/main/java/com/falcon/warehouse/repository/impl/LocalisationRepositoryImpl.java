@@ -7,10 +7,8 @@ import androidx.lifecycle.LiveData;
 import com.falcon.warehouse.dao.LocalisationDao;
 import com.falcon.warehouse.entity.Localisation;
 import com.falcon.warehouse.repository.LocalisationRepository;
-import com.falcon.warehouse.root.Constants;
 import com.falcon.warehouse.service.LocalisationService;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.Executor;
 
@@ -20,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LocalisationRepositoryImpl implements LocalisationRepository {
+public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements LocalisationRepository {
 
     private final LocalisationDao localisationDao;
     private final LocalisationService localisationService;
@@ -35,39 +33,39 @@ public class LocalisationRepositoryImpl implements LocalisationRepository {
 
     @Override
     public void saveLocalisation(Localisation localisation) {
-        Log.i("LOCALISATION_REPO", "SAVING LOCALISATION" + localisation.getLocalisationName());
         localisationDao.saveLocalisation(localisation);
     }
 
     @Override
     public LiveData<Localisation> getLocalisationByIndex(String localisationIndex) {
-        Log.i("LOCALISATION_REPO", "GET LOCALISATION BY INDEX IN LOCALISATION REPO");
         fetchLocalisationByIndex(localisationIndex);
         return localisationDao.getLocalisationByIndex(localisationIndex);
     }
 
-    //todo is in UI thread only for executor call
+    /**
+     * Method checks if data was fetched. Is only for executor call
+     *
+     * @param localisationIndex index of localisation
+     * @param lastRefreshMax Date of last refresh -3 minutes
+     * @return localisation if exists or null
+     */
     @Override
     public Localisation fetchedLocalisation(String localisationIndex, Date lastRefreshMax) {
         return localisationDao.fetchedLocalisation(localisationIndex, lastRefreshMax);
     }
 
     private void fetchLocalisationByIndex(final String localisationIndex) {
-        Log.i("FETCH_BY_INDEX", localisationIndex);
         executor.execute(() ->{
             boolean isRefreshTime = (localisationDao
                     .fetchedLocalisation(localisationIndex, getMaxRefreshTime(new Date()))== null);
 
             if (isRefreshTime) {
-                Log.i("FETCHING_LOC", "FETCHING LOCALISATION FROM API");
                 localisationService.getLocalisationByIndex(localisationIndex).enqueue(new Callback<Localisation>() {
                     @Override
                     public void onResponse(Call<Localisation> call, Response<Localisation> response) {
                         executor.execute(() -> {
-                            Log.i("RESPONSE BODY", "" + response.body().getId() + response.body().getLocalisationName());
                             Localisation localisation = response.body();
                             localisation.setLastFetchedDate(new Date());
-                            Log.i("LOCALISATION_F_sAVE", localisation.getLocalisationIndex());
                             localisationDao.saveLocalisation(localisation);
                         });
                     }
@@ -83,11 +81,4 @@ public class LocalisationRepositoryImpl implements LocalisationRepository {
         });
     }
 
-    //todo add in base repository for all repositories
-    private Date getMaxRefreshTime(Date currentDate){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(currentDate);
-        cal.add(Calendar.MINUTE, -Constants.REFRESH_TIME_IN_MINUTES);
-        return cal.getTime();
-    }
 }
