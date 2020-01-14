@@ -1,12 +1,10 @@
 package com.falcon.warehouse.contract;
 
-
 import androidx.lifecycle.LiveData;
 
 import com.falcon.warehouse.entity.Localisation;
 
-public interface ILocalisationContract {
-
+public interface ILocalisationDetailContract {
     interface Model {
         LiveData<Localisation> getLocalisationByIndex(String localisationIndex);
     }
@@ -18,7 +16,7 @@ public interface ILocalisationContract {
         void setLocalisationName(String localisationName);
     }
 
-    interface Presenter extends BasePresenter<View> {
+    interface Presenter extends BasePresenter<ILocalisationDetailContract.View> {
         void setLocalisationToTextView();
     }
 }

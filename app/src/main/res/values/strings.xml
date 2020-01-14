@@ -3,4 +3,11 @@
     <string name="choose_application_mode">Wybierz tryb aplikacji</string>
     <string name="mode_online">Online</string>
     <string name="mode_offline">Offline</string>
+    <string name="status_text">Status</string>
+    <string name="what_to_do">Wybierz co chcesz zrobić</string>
+    <string name="scan">Skanuj</string>
+    <string name="add">Dodaj</string>
+    <string name="show_all_positions">Wyświetl wszystko</string>
+    <string name="localisation_menu">Lokalizacja Menu</string>
+    <string name="localisation_detail_info_text">Szczegóły Lokalizacji:</string>
 </resources>

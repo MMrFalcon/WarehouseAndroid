@@ -2,15 +2,15 @@ package com.falcon.warehouse.model;
 
 import androidx.lifecycle.LiveData;
 
-import com.falcon.warehouse.contract.ILocalisationContract;
+import com.falcon.warehouse.contract.ILocalisationDetailContract;
 import com.falcon.warehouse.entity.Localisation;
 import com.falcon.warehouse.repository.LocalisationRepository;
 
-public class LocalisationModel implements ILocalisationContract.Model {
+public class LocalisationDetailModel implements ILocalisationDetailContract.Model {
 
     private final LocalisationRepository localisationRepository;
 
-    public LocalisationModel(LocalisationRepository localisationRepository) {
+    public LocalisationDetailModel(LocalisationRepository localisationRepository) {
         this.localisationRepository = localisationRepository;
     }
 

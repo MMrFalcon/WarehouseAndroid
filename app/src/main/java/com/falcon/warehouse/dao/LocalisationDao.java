@@ -22,4 +22,7 @@ public interface LocalisationDao {
 
     @Query("SELECT * FROM localisation WHERE localisation_index LIKE :localisationIndex AND last_fetched_date > :lastRefreshMax LIMIT 1")
     Localisation fetchedLocalisation(String localisationIndex, Date lastRefreshMax);
+
+    @Query("SELECT * FROM localisation ORDER BY last_fetched_date LIMIT 1")
+    LiveData<Localisation> getLastFetchedLocalisation();
 }

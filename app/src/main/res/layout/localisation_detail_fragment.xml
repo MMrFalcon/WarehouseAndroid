@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbarStyle="outsideOverlay"
-    tools:context=".SkeletonActivity">
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    tools:context=".fragment.LocalisationDetailFragment">
 
 
     <com.google.android.material.card.MaterialCardView
@@ -22,44 +22,44 @@
             android:layout_height="match_parent" >
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/skeletonInfo"
+                android:id="@+id/localisationInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:layout_centerHorizontal="true"
-                android:text="Skeleton Info" />
+                android:text="@string/localisation_detail_info_text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/skeletonName"
+                android:id="@+id/localisationId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/skeletonInfo"
+                android:layout_below="@+id/localisationInfo"
                 android:layout_marginEnd="12dp"
                 android:padding="20dp"
                 android:layout_centerHorizontal="true"
-                android:text="TextView" />
+                />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/skeletonAge"
+                android:id="@+id/localisationIndex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/skeletonName"
+                android:layout_below="@+id/localisationId"
                 android:layout_marginEnd="12dp"
                 android:padding="20dp"
                 android:layout_centerHorizontal="true"
-                android:text="TextView" />
+                 />
 
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/loadSkeleton"
-                style="@style/custom_mode_buttons"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/localisationName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/skeletonAge"
+                android:layout_below="@+id/localisationIndex"
                 android:layout_marginEnd="12dp"
                 android:padding="20dp"
                 android:layout_centerHorizontal="true"
-                android:text="Show Me!" />
+                 />
+
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>

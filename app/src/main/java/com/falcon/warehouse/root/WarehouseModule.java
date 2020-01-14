@@ -5,11 +5,8 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.falcon.warehouse.dao.LocalisationDao;
-import com.falcon.warehouse.dao.SkeletonDao;
 import com.falcon.warehouse.repository.LocalisationRepository;
-import com.falcon.warehouse.repository.SkeletonRepository;
 import com.falcon.warehouse.repository.impl.LocalisationRepositoryImpl;
-import com.falcon.warehouse.repository.impl.SkeletonRepositoryImpl;
 import com.falcon.warehouse.service.LocalisationService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -49,17 +46,6 @@ public class WarehouseModule {
         return new GsonBuilder().create();
     }
 
-    @Singleton
-    @Provides
-    public SkeletonDao provideSkeletonDao(WarehouseDatabase warehouseDatabase) {
-        return warehouseDatabase.getSkeletonDao();
-    }
-
-    @Singleton
-    @Provides
-    public SkeletonRepository provideSkeletonRepo(SkeletonDao skeletonDao) {
-        return new SkeletonRepositoryImpl(skeletonDao);
-    }
 
     @Singleton
     @Provides
@@ -76,7 +62,7 @@ public class WarehouseModule {
 
     @Singleton
     @Provides
-    public LocalisationService provideLocalisaionApiService(Retrofit apiAdapter) {
+    public LocalisationService provideLocalisationApiService(Retrofit apiAdapter) {
         return apiAdapter.create(LocalisationService.class);
     }
 

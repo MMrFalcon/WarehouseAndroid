@@ -38,8 +38,12 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
 
     @Override
     public LiveData<Localisation> getLocalisationByIndex(String localisationIndex) {
-        fetchLocalisationByIndex(localisationIndex);
-        return localisationDao.getLocalisationByIndex(localisationIndex);
+        if (localisationIndex.isEmpty()) {
+            return localisationDao.getLastFetchedLocalisation();
+        } else {
+            fetchLocalisationByIndex(localisationIndex);
+            return localisationDao.getLocalisationByIndex(localisationIndex);
+        }
     }
 
     /**
@@ -52,6 +56,11 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
     @Override
     public Localisation fetchedLocalisation(String localisationIndex, Date lastRefreshMax) {
         return localisationDao.fetchedLocalisation(localisationIndex, lastRefreshMax);
+    }
+
+    @Override
+    public LiveData<Localisation> getLastFetchedLocalisation() {
+        return localisationDao.getLastFetchedLocalisation();
     }
 
     private void fetchLocalisationByIndex(final String localisationIndex) {

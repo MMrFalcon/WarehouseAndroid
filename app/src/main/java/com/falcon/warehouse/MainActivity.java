@@ -1,14 +1,15 @@
 package com.falcon.warehouse;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.falcon.warehouse.fragment.LocalisationFragment;
 import com.falcon.warehouse.root.App;
-import com.google.android.material.button.MaterialButton;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements NavigationHost  {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,14 +18,26 @@ public class MainActivity extends AppCompatActivity  {
 
         ((App) getApplication()).getComponent().inject(this);
 
-
-        final MaterialButton offline = findViewById(R.id.offlineButton);
-        final MaterialButton online = findViewById(R.id.onlineButton);
-
-        offline.setOnClickListener(v -> startActivity(new Intent(this, SkeletonActivity.class)));
-
-        online.setOnClickListener(v ->  startActivity(new Intent(this, LocalisationActivity.class)));
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container, new LocalisationFragment())
+                    .commit();
+        }
 
     }
 
+    @Override
+    public void navigateTo(Fragment fragment, boolean addToBackStack) {
+        FragmentTransaction transaction =
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, fragment);
+
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+
+        transaction.commit();
+    }
 }

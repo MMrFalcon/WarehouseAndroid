@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbarStyle="outsideOverlay"
-    tools:context=".LocalisationActivity">
-
+    tools:context=".fragment.LocalisationFragment">
 
     <com.google.android.material.card.MaterialCardView
         style="@style/custom_card_layout"
@@ -22,56 +21,59 @@
             android:layout_height="match_parent" >
 
             <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/localisationMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="20dp"
+                android:text="@string/localisation_menu"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/localisationInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/localisationMenu"
                 android:padding="20dp"
                 android:layout_centerHorizontal="true"
-                android:text="Localisation Info" />
+                android:text="@string/what_to_do" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/localisationId"
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/scanLocalisationButton"
+                style="@style/custom_mode_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/localisationInfo"
                 android:layout_marginEnd="12dp"
                 android:padding="20dp"
                 android:layout_centerHorizontal="true"
-                android:text="TextView" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/localisationIndex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/localisationId"
-                android:layout_marginEnd="12dp"
-                android:padding="20dp"
-                android:layout_centerHorizontal="true"
-                android:text="TextView" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/localisationName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/localisationIndex"
-                android:layout_marginEnd="12dp"
-                android:padding="20dp"
-                android:layout_centerHorizontal="true"
-                android:text="TextView" />
-
+                android:text="@string/scan" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/localisationButton"
+                android:id="@+id/showAllLocalisationButton"
                 style="@style/custom_mode_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/localisationName"
+                android:layout_below="@+id/scanLocalisationButton"
                 android:layout_marginEnd="12dp"
                 android:padding="20dp"
                 android:layout_centerHorizontal="true"
-                android:text="Show Me!" />
+                android:text="@string/show_all_positions" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addLocalisationButton"
+                style="@style/custom_mode_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/showAllLocalisationButton"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/add" />
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
 
 </ScrollView>
