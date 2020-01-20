@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_localisation"
+        android:icon="@drawable/localisation_icon"
+        android:title="@string/localisation" />
+    <item
+        android:id="@+id/navigation_product"
+        android:icon="@drawable/product_icon"
+        android:title="@string/product" />
+    <item
+        android:id="@+id/navigation_product_in_localisation"
+        android:icon="@drawable/details_icon"
+        android:title="@string/product_in_localisation" />
+</menu>

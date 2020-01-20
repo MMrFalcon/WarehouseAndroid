@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbarStyle="outsideOverlay"
-    tools:context=".fragment.LocalisationFragment">
+    tools:context=".fragment.ProductFragment">
 
     <include layout="@layout/main_menu_layout" />
 

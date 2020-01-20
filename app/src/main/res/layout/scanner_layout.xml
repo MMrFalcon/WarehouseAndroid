@@ -1,27 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+<com.google.android.material.card.MaterialCardView style="@style/custom_card_layout"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    tools:context=".fragment.LocalisationScannerFragment">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scanCamera"
-        android:orientation="vertical">
-
-    </LinearLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        style="@style/custom_card_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:cardPreventCornerOverlap="true"
-        app:layout_anchorGravity="center">
+    app:cardPreventCornerOverlap="true"
+    app:layout_anchorGravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,6 +32,4 @@
             android:text="@string/status_text" />
 
     </RelativeLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-</RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

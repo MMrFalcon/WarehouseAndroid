@@ -15,9 +15,8 @@ import com.falcon.warehouse.root.App;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
-public class LocalisationFragment extends Fragment {
-
-    private final String PAGE_TITLE = "Lokalizacja Menu";
+public class ProductFragment extends Fragment {
+    private final String PAGE_TITLE = "Produkt Menu";
 
     private MaterialButton scanButton;
     private MaterialButton showAllButton;
@@ -28,7 +27,7 @@ public class LocalisationFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((App) this.getActivity().getApplication()).getComponent().inject(this);
-        View view = inflater.inflate(R.layout.localisation_fragment, container, false);
+        View view = inflater.inflate(R.layout.product_fragment, container, false);
 
         scanButton = view.findViewById(R.id.scanButton);
         showAllButton = view.findViewById(R.id.showAllButton);
@@ -38,7 +37,7 @@ public class LocalisationFragment extends Fragment {
         menuTitle.setText(PAGE_TITLE);
 
         scanButton.setOnClickListener( v -> ((NavigationHost) getActivity())
-                .navigateTo(new LocalisationScannerFragment(), true));
+                .navigateTo(new ProductScannerFragment(), true));
 
         return view;
     }

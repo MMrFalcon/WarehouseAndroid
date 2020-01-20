@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView style="@style/custom_card_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    app:cardPreventCornerOverlap="true"
+    app:layout_anchorGravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/menuTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:padding="20dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/menuInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/menuTitle"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/what_to_do" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/scanButton"
+                style="@style/custom_mode_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/menuInfo"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/scan" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/showAllButton"
+                style="@style/custom_mode_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/scanButton"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/show_all_positions" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addButton"
+                style="@style/custom_mode_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/showAllButton"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/add" />
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>

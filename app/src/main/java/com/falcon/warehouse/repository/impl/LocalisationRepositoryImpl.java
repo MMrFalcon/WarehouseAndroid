@@ -74,15 +74,19 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
                     public void onResponse(Call<Localisation> call, Response<Localisation> response) {
                         executor.execute(() -> {
                             Localisation localisation = response.body();
-                            localisation.setLastFetchedDate(new Date());
-                            localisationDao.saveLocalisation(localisation);
+                            if (localisation!= null) {
+                                localisation.setLastFetchedDate(new Date());
+                                localisationDao.saveLocalisation(localisation);
+                            } else {
+                                Log.i("NULL_OBJECT", "Localisation is null");
+                            }
                         });
                     }
 
                     @Override
                     public void onFailure(Call<Localisation> call, Throwable t) {
                         Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
-                        throw new RuntimeException(t);
+                        Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
                     }
                 });
             }

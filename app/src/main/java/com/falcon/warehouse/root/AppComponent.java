@@ -2,7 +2,10 @@ package com.falcon.warehouse.root;
 
 import com.falcon.warehouse.MainActivity;
 import com.falcon.warehouse.fragment.LocalisationDetailFragment;
+import com.falcon.warehouse.fragment.LocalisationFragment;
 import com.falcon.warehouse.fragment.LocalisationScannerFragment;
+import com.falcon.warehouse.fragment.ProductFragment;
+import com.falcon.warehouse.fragment.ProductScannerFragment;
 import com.falcon.warehouse.module.LocalisationModule;
 
 import javax.inject.Singleton;
@@ -15,7 +18,10 @@ import dagger.Component;
 public interface AppComponent {
 
     void inject(MainActivity mainActivity);
+    void inject(LocalisationFragment localisationFragment);
     void inject(LocalisationDetailFragment localisationDetailFragment);
     void inject(LocalisationScannerFragment localisationScannerFragment);
+    void inject(ProductFragment productFragment);
+    void inject(ProductScannerFragment productScannerFragment);
 
 }
