@@ -5,9 +5,13 @@ import android.app.Application;
 import androidx.room.Room;
 
 import com.falcon.warehouse.dao.LocalisationDao;
+import com.falcon.warehouse.dao.ProductDao;
 import com.falcon.warehouse.repository.LocalisationRepository;
+import com.falcon.warehouse.repository.ProductRepository;
 import com.falcon.warehouse.repository.impl.LocalisationRepositoryImpl;
+import com.falcon.warehouse.repository.impl.ProductRepositoryImpl;
 import com.falcon.warehouse.service.LocalisationService;
+import com.falcon.warehouse.service.ProductService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -72,6 +76,24 @@ public class WarehouseModule {
                                                           LocalisationService localisationService,
                                                           Executor executor) {
         return new LocalisationRepositoryImpl(localisationDao, localisationService, executor);
+    }
+
+    @Singleton
+    @Provides
+    public ProductDao productDao(WarehouseDatabase warehouseDatabase) {
+        return warehouseDatabase.getProductDao();
+    }
+
+    @Singleton
+    @Provides
+    public ProductService provideProductService(Retrofit apiAdapter) {
+        return apiAdapter.create(ProductService.class);
+    }
+
+    @Singleton
+    @Provides
+    public ProductRepository provideProductRepo(ProductDao productDao, ProductService productService, Executor executor) {
+        return new ProductRepositoryImpl(productDao, productService, executor);
     }
 
 }
