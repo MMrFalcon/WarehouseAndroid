@@ -4,6 +4,7 @@ import com.falcon.warehouse.MainActivity;
 import com.falcon.warehouse.fragment.LocalisationDetailFragment;
 import com.falcon.warehouse.fragment.LocalisationFragment;
 import com.falcon.warehouse.fragment.LocalisationScannerFragment;
+import com.falcon.warehouse.fragment.ProductDetailFragment;
 import com.falcon.warehouse.fragment.ProductFragment;
 import com.falcon.warehouse.fragment.ProductScannerFragment;
 import com.falcon.warehouse.module.LocalisationModule;
@@ -24,5 +25,6 @@ public interface AppComponent {
     void inject(LocalisationScannerFragment localisationScannerFragment);
     void inject(ProductFragment productFragment);
     void inject(ProductScannerFragment productScannerFragment);
+    void inject(ProductDetailFragment productDetailFragment);
 
 }

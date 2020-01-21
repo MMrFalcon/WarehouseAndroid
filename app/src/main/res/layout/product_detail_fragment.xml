@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    tools:context=".fragment.ProductDetailFragment">
+
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/custom_card_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:cardPreventCornerOverlap="true"
+        app:layout_anchorGravity="center">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/localisationInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/product_detail_info_text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/productId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/localisationInfo"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/productIndex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/productId"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/productName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/productIndex"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/productQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/productName"
+                android:layout_marginEnd="12dp"
+                android:padding="20dp"
+                android:layout_centerHorizontal="true"
+                />
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</ScrollView>

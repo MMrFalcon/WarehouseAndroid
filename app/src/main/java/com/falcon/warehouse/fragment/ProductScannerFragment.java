@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.contract.IProductScannerContract;
 import com.falcon.warehouse.root.App;
@@ -92,9 +93,9 @@ public class ProductScannerFragment extends Fragment implements ZXingScannerView
 
         setProductIndex(rawResult.getText());
         presenter.fetchProductByIndex();
-//
-//        ((NavigationHost) getActivity())
-//                .navigateTo(new LocalisationDetailFragment(), false);
+
+        ((NavigationHost) getActivity())
+                .navigateTo(new ProductDetailFragment(), false);
     }
 
     private void checkCameraPermission(Activity activity) {

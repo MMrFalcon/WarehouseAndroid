@@ -10,6 +10,7 @@
     <string name="show_all_positions">Lista</string>
     <string name="localisation_menu">Lokalizacja Menu</string>
     <string name="localisation_detail_info_text">Szczegóły Lokalizacji:</string>
+    <string name="product_detail_info_text">Szczegóły Produktu:</string>
     <string name="localisation">Lokalizacja</string>
     <string name="product">Produkt</string>
     <string name="product_in_localisation">Szczegóły</string>

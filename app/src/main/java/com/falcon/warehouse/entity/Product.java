@@ -25,7 +25,7 @@ public class Product {
     private String productIndex;
 
     @ColumnInfo(name = "product_name")
-    @SerializedName("productName")
+    @SerializedName("name")
     @Expose
     private String productName;
 
