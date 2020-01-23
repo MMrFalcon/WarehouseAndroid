@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.falcon.warehouse.fragment.LocalisationFragment;
 import com.falcon.warehouse.fragment.ProductFragment;
+import com.falcon.warehouse.fragment.ProductLocalisationFragment;
 import com.falcon.warehouse.root.App;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationHost  {
                         navigateTo(new ProductFragment(), true);
                         return true;
                     case R.id.navigation_product_in_localisation:
-                        navigateTo(new LocalisationFragment(), true);
+                        navigateTo(new ProductLocalisationFragment(), true);
                         return true;
                 }
                 return false;

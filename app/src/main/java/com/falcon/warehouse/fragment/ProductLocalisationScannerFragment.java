@@ -1,0 +1,106 @@
+package com.falcon.warehouse.fragment;
+
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.falcon.warehouse.R;
+import com.falcon.warehouse.root.App;
+import com.falcon.warehouse.root.Constants;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.zxing.Result;
+
+import java.util.Objects;
+
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
+
+public class ProductLocalisationScannerFragment extends Fragment implements ZXingScannerView.ResultHandler {
+
+    private ZXingScannerView mScannerView;
+    private TextInputEditText scanOutput;
+
+    private final int CAMERA_PERMISSION_STATE = 1;
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        ((App) this.getActivity().getApplication()).getComponent().inject(this);
+        View fragmentView = inflater.inflate(R.layout.scanner_fragment, container, false);
+
+        scanOutput = fragmentView.findViewById(R.id.scanOutput);
+
+        final LinearLayout scanCamera = fragmentView.findViewById(R.id.scanCamera);
+
+        checkCameraPermission(Objects.requireNonNull(getActivity()));
+        mScannerView = new ZXingScannerView(getContext());   // Programmatically initialize the scanner fragmentView
+        scanCamera.addView(mScannerView);
+
+        return fragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScannerView.setResultHandler(this);
+        mScannerView.startCamera();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mScannerView.stopCamera();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
+    public void handleResult(Result rawResult) {
+        Log.v("tag", rawResult.getText()); // Prints scan results
+        Log.v("tag", rawResult.getBarcodeFormat().toString());
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            String scanType = bundle.getString(Constants.SCAN_TYPE_KEY);
+
+            if (scanType != null && scanType.equals(Constants.SCAN_LOCALISATION_KEY)) {
+                Toast.makeText(getContext(), "LOCALISATION SCAN + " + rawResult.getText(), Toast.LENGTH_LONG).show();
+            } else if (scanType != null && scanType.equals(Constants.SCAN_PRODUCT_KEY)) {
+                Toast.makeText(getContext(), "PRODUCT SCAN + " + rawResult.getText(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void checkCameraPermission(Activity activity) {
+
+        if (ContextCompat.checkSelfPermission(activity.getApplicationContext(),
+                Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_STATE);
+        }
+    }
+}

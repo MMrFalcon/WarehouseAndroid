@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.falcon.warehouse.dao.ProductDao;
-import com.falcon.warehouse.entity.Localisation;
 import com.falcon.warehouse.entity.Product;
 import com.falcon.warehouse.repository.ProductRepository;
 import com.falcon.warehouse.service.ProductService;
@@ -84,7 +83,7 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
      * @return product if exist else returns null
      */
     @Override
-    public Localisation fetchedProduct(String productIndex, Date lastRefreshMax) {
+    public Product fetchedProduct(String productIndex, Date lastRefreshMax) {
         return productDao.fetchedProduct(productIndex, lastRefreshMax);
     }
 

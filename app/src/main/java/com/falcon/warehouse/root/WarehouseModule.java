@@ -6,11 +6,15 @@ import androidx.room.Room;
 
 import com.falcon.warehouse.dao.LocalisationDao;
 import com.falcon.warehouse.dao.ProductDao;
+import com.falcon.warehouse.dao.ProductLocalisationDao;
 import com.falcon.warehouse.repository.LocalisationRepository;
+import com.falcon.warehouse.repository.ProductLocalisationRepository;
 import com.falcon.warehouse.repository.ProductRepository;
 import com.falcon.warehouse.repository.impl.LocalisationRepositoryImpl;
+import com.falcon.warehouse.repository.impl.ProductLocalisationRepositoryImpl;
 import com.falcon.warehouse.repository.impl.ProductRepositoryImpl;
 import com.falcon.warehouse.service.LocalisationService;
+import com.falcon.warehouse.service.ProductLocalisationService;
 import com.falcon.warehouse.service.ProductService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -94,6 +98,25 @@ public class WarehouseModule {
     @Provides
     public ProductRepository provideProductRepo(ProductDao productDao, ProductService productService, Executor executor) {
         return new ProductRepositoryImpl(productDao, productService, executor);
+    }
+
+    @Singleton
+    @Provides
+    public ProductLocalisationDao productLocalisationDao(WarehouseDatabase warehouseDatabase) {
+        return warehouseDatabase.getProductLocalisationDao();
+    }
+
+    @Singleton
+    @Provides
+    public ProductLocalisationService productLocalisationService(Retrofit apiAdapter) {
+        return apiAdapter.create(ProductLocalisationService.class);
+    }
+
+    @Singleton
+    @Provides
+    public ProductLocalisationRepository productLocalisationRepository(ProductLocalisationDao productLocalisationDao,
+                                                                       ProductLocalisationService productLocalisationService, Executor executor) {
+        return new ProductLocalisationRepositoryImpl(productLocalisationDao, productLocalisationService, executor);
     }
 
 }
