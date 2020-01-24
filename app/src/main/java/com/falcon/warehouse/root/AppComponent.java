@@ -10,6 +10,7 @@ import com.falcon.warehouse.fragment.ProductLocalisationFragment;
 import com.falcon.warehouse.fragment.ProductLocalisationScannerFragment;
 import com.falcon.warehouse.fragment.ProductScannerFragment;
 import com.falcon.warehouse.module.LocalisationModule;
+import com.falcon.warehouse.module.ProductLocalisationModule;
 import com.falcon.warehouse.module.ProductModule;
 
 import javax.inject.Singleton;
@@ -18,7 +19,7 @@ import dagger.Component;
 
 @Singleton
 @Component(modules = {AppModule.class, WarehouseModule.class, RetrofitModule.class,
-        LocalisationModule.class, ProductModule.class})
+        LocalisationModule.class, ProductModule.class, ProductLocalisationModule.class})
 public interface AppComponent {
 
     void inject(MainActivity mainActivity);

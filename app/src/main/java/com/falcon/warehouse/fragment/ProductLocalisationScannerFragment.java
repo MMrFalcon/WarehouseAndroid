@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.falcon.warehouse.R;
+import com.falcon.warehouse.contract.IProductLocalisationScannerContract;
 import com.falcon.warehouse.root.App;
 import com.falcon.warehouse.root.Constants;
 import com.google.android.material.textfield.TextInputEditText;
@@ -25,21 +25,27 @@ import com.google.zxing.Result;
 
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class ProductLocalisationScannerFragment extends Fragment implements ZXingScannerView.ResultHandler {
+public class ProductLocalisationScannerFragment extends Fragment implements ZXingScannerView.ResultHandler,
+        IProductLocalisationScannerContract.View {
 
     private ZXingScannerView mScannerView;
     private TextInputEditText scanOutput;
 
     private final int CAMERA_PERMISSION_STATE = 1;
 
+    @Inject
+    IProductLocalisationScannerContract.Presenter presenter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((App) this.getActivity().getApplication()).getComponent().inject(this);
         View fragmentView = inflater.inflate(R.layout.scanner_fragment, container, false);
-
+        presenter.attachView(this);
         scanOutput = fragmentView.findViewById(R.id.scanOutput);
 
         final LinearLayout scanCamera = fragmentView.findViewById(R.id.scanCamera);
@@ -54,6 +60,7 @@ public class ProductLocalisationScannerFragment extends Fragment implements ZXin
     @Override
     public void onResume() {
         super.onResume();
+        presenter.attachView(this);
         mScannerView.setResultHandler(this);
         mScannerView.startCamera();
     }
@@ -67,12 +74,14 @@ public class ProductLocalisationScannerFragment extends Fragment implements ZXin
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.detachView(this);
     }
 
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        presenter.detachView(this);
     }
 
     @Override
@@ -83,11 +92,14 @@ public class ProductLocalisationScannerFragment extends Fragment implements ZXin
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             String scanType = bundle.getString(Constants.SCAN_TYPE_KEY);
-
+            //todo send in bundle what date should be fetched from repo (by localisation or product)
+            //todo add a grid template for material cards
             if (scanType != null && scanType.equals(Constants.SCAN_LOCALISATION_KEY)) {
-                Toast.makeText(getContext(), "LOCALISATION SCAN + " + rawResult.getText(), Toast.LENGTH_LONG).show();
+                setLocalisationIndex(rawResult.getText());
+                presenter.fetchByLocalisationIndex();
             } else if (scanType != null && scanType.equals(Constants.SCAN_PRODUCT_KEY)) {
-                Toast.makeText(getContext(), "PRODUCT SCAN + " + rawResult.getText(), Toast.LENGTH_LONG).show();
+                setProductIndex(rawResult.getText());
+                presenter.fetchByProductIndex();
             }
         }
     }
@@ -102,5 +114,33 @@ public class ProductLocalisationScannerFragment extends Fragment implements ZXin
                     new String[]{Manifest.permission.CAMERA},
                     CAMERA_PERMISSION_STATE);
         }
+    }
+
+    @Override
+    public String getProductIndex() {
+        if (scanOutput.getText() != null) {
+            return scanOutput.getText().toString();
+        } else {
+            return "";
+        }
+    }
+
+    @Override
+    public void setProductIndex(String productIndex) {
+        scanOutput.setText(productIndex);
+    }
+
+    @Override
+    public String getLocalisationIndex() {
+        if (scanOutput.getText() != null) {
+            return scanOutput.getText().toString();
+        } else {
+            return "";
+        }
+    }
+
+    @Override
+    public void setLocalisationIndex(String localisationIndex) {
+        scanOutput.setText(localisationIndex);
     }
 }
