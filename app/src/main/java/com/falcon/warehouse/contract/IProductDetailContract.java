@@ -21,6 +21,6 @@ public interface IProductDetailContract {
     }
 
     interface Presenter extends BasePresenter<View> {
-        void setProductToTextView();
+        void setProductToTextView(String productIndex);
     }
 }

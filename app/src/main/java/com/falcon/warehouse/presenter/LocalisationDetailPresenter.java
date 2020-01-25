@@ -14,10 +14,9 @@ public class LocalisationDetailPresenter extends BasePresenterImpl<ILocalisation
         this.model = model;
     }
 
-    //returns last fetched localisation
     @Override
-    public void setLocalisationToTextView() {
-        LiveData<Localisation> localisationLiveData = model.getLocalisationByIndex("");
+    public void setLocalisationToTextView(String localisationIndex) {
+        LiveData<Localisation> localisationLiveData = model.getLocalisationByIndex(localisationIndex);
         view.setLocalisation(localisationLiveData);
     }
 

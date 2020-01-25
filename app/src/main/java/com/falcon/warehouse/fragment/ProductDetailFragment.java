@@ -14,6 +14,7 @@ import com.falcon.warehouse.R;
 import com.falcon.warehouse.contract.IProductDetailContract;
 import com.falcon.warehouse.entity.Product;
 import com.falcon.warehouse.root.App;
+import com.falcon.warehouse.root.Constants;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.math.BigDecimal;
@@ -44,7 +45,14 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
         productName = fragmentView.findViewById(R.id.productName);
         productQuantity = fragmentView.findViewById(R.id.productQuantity);
 
-        presenter.setProductToTextView();
+        //update by index or fetch last scanned data
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            presenter.setProductToTextView(bundle.getString(Constants.SCAN_PRODUCT_KEY));
+        } else {
+            presenter.setProductToTextView("");
+        }
+
 
         return fragmentView;
     }

@@ -16,8 +16,8 @@ public class ProductDetailPresenter extends BasePresenterImpl<IProductDetailCont
     }
 
     @Override
-    public void setProductToTextView() {
-        LiveData<Product> productLiveData = model.getProductByIndex("");
+    public void setProductToTextView(String productIndex) {
+        LiveData<Product> productLiveData = model.getProductByIndex(productIndex);
         view.setProduct(productLiveData);
     }
 }

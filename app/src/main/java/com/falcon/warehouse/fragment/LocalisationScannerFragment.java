@@ -20,6 +20,7 @@ import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.contract.ILocalisationScannerContract;
 import com.falcon.warehouse.root.App;
+import com.falcon.warehouse.root.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.Result;
 
@@ -93,8 +94,14 @@ ILocalisationScannerContract.View{
         setLocalisationIndex(rawResult.getText());
         presenter.fetchLocalisationByIndex();
 
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.SCAN_LOCALISATION_KEY, rawResult.getText());
+
+        LocalisationDetailFragment localisationDetailFragment = new LocalisationDetailFragment();
+        localisationDetailFragment.setArguments(bundle);
+
         ((NavigationHost) getActivity())
-                .navigateTo(new LocalisationDetailFragment(), false);
+                .navigateTo(localisationDetailFragment, false);
     }
 
     private void checkCameraPermission(Activity activity) {

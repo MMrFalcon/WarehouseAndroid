@@ -14,6 +14,7 @@ import com.falcon.warehouse.R;
 import com.falcon.warehouse.contract.ILocalisationDetailContract;
 import com.falcon.warehouse.entity.Localisation;
 import com.falcon.warehouse.root.App;
+import com.falcon.warehouse.root.Constants;
 import com.google.android.material.textview.MaterialTextView;
 
 import javax.inject.Inject;
@@ -38,7 +39,16 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
         localisationIndex = fragmentView.findViewById(R.id.localisationIndex);
 
         presenter.attachView(this);
-        presenter.setLocalisationToTextView();
+
+        Bundle bundle = this.getArguments();
+
+        //update by index or fetch last scanned data
+        if (bundle != null) {
+            presenter.setLocalisationToTextView(bundle.getString(Constants.SCAN_LOCALISATION_KEY));
+        } else {
+            presenter.setLocalisationToTextView("");
+        }
+
 
         return fragmentView;
     }

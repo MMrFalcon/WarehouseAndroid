@@ -16,4 +16,6 @@
     <string name="product_in_localisation">Szczegóły</string>
     <string name="scan_localisation">Skanuj Loklizacje</string>
     <string name="scan_product">Skanuj Produkt</string>
+    <string name="edit">Edytuj</string>
+    <string name="delete">Usuń</string>
 </resources>

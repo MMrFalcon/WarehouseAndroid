@@ -17,6 +17,6 @@ public interface ILocalisationDetailContract {
     }
 
     interface Presenter extends BasePresenter<ILocalisationDetailContract.View> {
-        void setLocalisationToTextView();
+        void setLocalisationToTextView(String localisationIndex);
     }
 }

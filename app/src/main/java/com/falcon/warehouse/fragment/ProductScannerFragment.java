@@ -20,6 +20,7 @@ import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.contract.IProductScannerContract;
 import com.falcon.warehouse.root.App;
+import com.falcon.warehouse.root.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.Result;
 
@@ -93,8 +94,14 @@ public class ProductScannerFragment extends Fragment implements ZXingScannerView
         setProductIndex(rawResult.getText());
         presenter.fetchProductByIndex();
 
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.SCAN_PRODUCT_KEY, rawResult.getText());
+
+        ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+        productDetailFragment.setArguments(bundle);
+
         ((NavigationHost) getActivity())
-                .navigateTo(new ProductDetailFragment(), false);
+                .navigateTo(productDetailFragment, false);
     }
 
     private void checkCameraPermission(Activity activity) {
