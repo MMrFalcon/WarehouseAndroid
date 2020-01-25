@@ -74,16 +74,16 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
 
     @Override
     public void setLocalisationId(String localisationId) {
-        this.localisationId.setText(localisationId);
+        this.localisationId.setText("ID: " + localisationId);
     }
 
     @Override
     public void setLocalisationIndex(String localisationIndex) {
-        this.localisationIndex.setText(localisationIndex);
+        this.localisationIndex.setText("Index: " + localisationIndex);
     }
 
     @Override
     public void setLocalisationName(String localisationName) {
-        this.localisationName.setText(localisationName);
+        this.localisationName.setText("Nazwa: " + localisationName);
     }
 }

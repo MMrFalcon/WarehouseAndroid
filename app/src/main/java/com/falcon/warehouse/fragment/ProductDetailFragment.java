@@ -17,6 +17,7 @@ import com.falcon.warehouse.root.App;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import javax.inject.Inject;
 
@@ -79,21 +80,22 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
 
     @Override
     public void setProductId(Long productId) {
-        this.productId.setText(String.valueOf(productId));
+        this.productId.setText("ID: " + productId);
     }
 
     @Override
     public void setProductIndex(String productIndex) {
-        this.productIndex.setText(productIndex);
+        this.productIndex.setText("Index: " + productIndex);
     }
 
     @Override
     public void setProductName(String productName) {
-        this.productName.setText(productName);
+        this.productName.setText("Nazwa: " + productName);
     }
 
     @Override
     public void setQuantity(BigDecimal quantity) {
-        this.productQuantity.setText(quantity.toPlainString());
+        DecimalFormat df = new DecimalFormat("#,###.00");
+        this.productQuantity.setText("Ilość: " + df.format(quantity));
     }
 }
