@@ -49,33 +49,29 @@ public class ProductLocalisationRepositoryImpl extends BaseRepositoryImpl implem
     }
 
     private void fetchByLocalisationIndex(final String localisationIndex) {
-        executor.execute(() -> {
-            boolean isRefreshTime = (productLocalisationDao.lastFetchedByLocalisationIndex(localisationIndex,
-                    getMaxRefreshTime(new Date())) == null);
-
-            if (isRefreshTime) {
-                productLocalisationService.getByLocalisationIndex(localisationIndex).enqueue(new Callback<ProductLocalisation>() {
-                    @Override
-                    public void onResponse(Call<ProductLocalisation> call, Response<ProductLocalisation> response) {
-                        executor.execute(() -> {
-                            ProductLocalisation productLocalisation = response.body();
-                            if (productLocalisation != null) {
-                                productLocalisation.setLastFetchedDate(new Date());
-                                productLocalisationDao.saveProductLocalisation(productLocalisation);
-                            } else {
-                                Log.i("NULL_OBJECT", "ProductLocalisation is null");
-                            }
+        executor.execute(() -> productLocalisationService.getByLocalisationIndex(localisationIndex).enqueue(new Callback<List<ProductLocalisation>>() {
+            @Override
+            public void onResponse(Call<List<ProductLocalisation>> call, Response<List<ProductLocalisation>> response) {
+                executor.execute(() -> {
+                    List<ProductLocalisation> productLocalisations = response.body();
+                    if (productLocalisations != null) {
+                        productLocalisations.forEach(productLocalisation -> {
+                            productLocalisation.setLastFetchedDate(new Date());
+                            productLocalisationDao.saveProductLocalisation(productLocalisation);
                         });
-                    }
 
-                    @Override
-                    public void onFailure(Call<ProductLocalisation> call, Throwable t) {
-                        Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
-                        Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                    } else {
+                        Log.i("NULL_OBJECT", "ProductLocalisation is null");
                     }
                 });
             }
-        });
+
+            @Override
+            public void onFailure(Call<List<ProductLocalisation>> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+            }
+        }));
     }
 
     @Override
@@ -90,33 +86,29 @@ public class ProductLocalisationRepositoryImpl extends BaseRepositoryImpl implem
     }
 
     private void fetchByProductIndex(final String productIndex) {
-        executor.execute(() -> {
-            boolean isRefreshTime = (productLocalisationDao.lastFetchedByProductIndex(productIndex,
-                    getMaxRefreshTime(new Date())) == null);
+        executor.execute(() -> productLocalisationService.getByProductIndex(productIndex).enqueue(new Callback<List<ProductLocalisation>>() {
+            @Override
+            public void onResponse(Call<List<ProductLocalisation>> call, Response<List<ProductLocalisation>> response) {
+                executor.execute(() -> {
+                    List<ProductLocalisation> productLocalisations = response.body();
 
-            if (isRefreshTime) {
-                productLocalisationService.getByProductIndex(productIndex).enqueue(new Callback<ProductLocalisation>() {
-                    @Override
-                    public void onResponse(Call<ProductLocalisation> call, Response<ProductLocalisation> response) {
-                        executor.execute(() -> {
-                            ProductLocalisation productLocalisation = response.body();
-                            if (productLocalisation != null) {
-                                productLocalisation.setLastFetchedDate(new Date());
-                                productLocalisationDao.saveProductLocalisation(productLocalisation);
-                            } else {
-                                Log.i("NULL_OBJECT", "ProductLocalisation is null");
-                            }
+                    if (productLocalisations != null) {
+                        productLocalisations.forEach(productLocalisation -> {
+                            productLocalisation.setLastFetchedDate(new Date());
+                            productLocalisationDao.saveProductLocalisation(productLocalisation);
                         });
-                    }
-
-                    @Override
-                    public void onFailure(Call<ProductLocalisation> call, Throwable t) {
-                        Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
-                        Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                    } else {
+                        Log.i("NULL_OBJECT", "ProductLocalisation is null");
                     }
                 });
             }
-        });
+
+            @Override
+            public void onFailure(Call<List<ProductLocalisation>> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+            }
+        }));
     }
 
     @Override
@@ -133,4 +125,37 @@ public class ProductLocalisationRepositoryImpl extends BaseRepositoryImpl implem
     public LiveData<List<ProductLocalisation>> getLastFetchedProductLocalisations() {
         return productLocalisationDao.getLastFetchedProductLocalisations();
     }
+
+    @Override
+    public LiveData<List<ProductLocalisation>> getAll() {
+        fetchAll();
+        return productLocalisationDao.getAll();
+    }
+
+    private void fetchAll() {
+        executor.execute(() -> productLocalisationService.getAll().enqueue(new Callback<List<ProductLocalisation>>() {
+            @Override
+            public void onResponse(Call<List<ProductLocalisation>> call, Response<List<ProductLocalisation>> response) {
+                executor.execute(() -> {
+                    List<ProductLocalisation> productLocalisations = response.body();
+
+                    if (productLocalisations != null) {
+                        productLocalisations.forEach(productLocalisation -> {
+                            productLocalisation.setLastFetchedDate(new Date());
+                            productLocalisationDao.saveProductLocalisation(productLocalisation);
+                        });
+                    } else {
+                        Log.i("NULL_OBJECT", "ProductLocalisation is null");
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<List<ProductLocalisation>> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+            }
+        }));
+    }
+
 }

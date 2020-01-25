@@ -2,8 +2,8 @@
 <resources>
     <style name="custom_card_layout" parent="Widget.MaterialComponents.CardView">
         <item name="cardCornerRadius">52dp</item>
-        <item name="android:layout_marginStart">5dp</item>
-        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
         <item name="android:layout_marginTop">10dp</item>
     </style>
 </resources>

@@ -76,7 +76,6 @@ public class ProductScannerFragment extends Fragment implements ZXingScannerView
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.detachView(this);
     }
 
 

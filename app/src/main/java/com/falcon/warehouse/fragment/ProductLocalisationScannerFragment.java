@@ -16,6 +16,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.contract.IProductLocalisationScannerContract;
 import com.falcon.warehouse.root.App;
@@ -74,7 +75,6 @@ public class ProductLocalisationScannerFragment extends Fragment implements ZXin
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.detachView(this);
     }
 
 
@@ -92,15 +92,21 @@ public class ProductLocalisationScannerFragment extends Fragment implements ZXin
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             String scanType = bundle.getString(Constants.SCAN_TYPE_KEY);
-            //todo send in bundle what date should be fetched from repo (by localisation or product)
-            //todo add a grid template for material cards
+
             if (scanType != null && scanType.equals(Constants.SCAN_LOCALISATION_KEY)) {
                 setLocalisationIndex(rawResult.getText());
+                bundle.putString(Constants.PROD_LOCALISATION_INDEX_KEY, rawResult.getText());
                 presenter.fetchByLocalisationIndex();
             } else if (scanType != null && scanType.equals(Constants.SCAN_PRODUCT_KEY)) {
                 setProductIndex(rawResult.getText());
+                bundle.putString(Constants.PROD_PRODUCT_INDEX_KEY, rawResult.getText());
                 presenter.fetchByProductIndex();
             }
+
+            ProductLocalisationListFragment listFragment = new ProductLocalisationListFragment();
+            listFragment.setArguments(bundle);
+            ((NavigationHost) getActivity())
+                    .navigateTo(listFragment, false);
         }
     }
 

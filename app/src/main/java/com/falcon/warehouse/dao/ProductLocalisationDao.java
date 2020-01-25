@@ -32,4 +32,7 @@ public interface ProductLocalisationDao {
 
     @Query("SELECT * FROM product_localisation ORDER BY last_fetched_date LIMIT 2")
     LiveData<List<ProductLocalisation>> getLastFetchedProductLocalisations();
+
+    @Query("SELECT * FROM product_localisation ORDER BY product_localisation_id")
+    LiveData<List<ProductLocalisation>> getAll();
 }

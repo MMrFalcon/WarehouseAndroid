@@ -53,7 +53,6 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.detachView(this);
     }
 
     @Override

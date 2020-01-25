@@ -57,7 +57,6 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.detachView(this);
     }
 
     @Override

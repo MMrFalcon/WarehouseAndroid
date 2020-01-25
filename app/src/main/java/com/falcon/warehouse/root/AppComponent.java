@@ -7,9 +7,11 @@ import com.falcon.warehouse.fragment.LocalisationScannerFragment;
 import com.falcon.warehouse.fragment.ProductDetailFragment;
 import com.falcon.warehouse.fragment.ProductFragment;
 import com.falcon.warehouse.fragment.ProductLocalisationFragment;
+import com.falcon.warehouse.fragment.ProductLocalisationListFragment;
 import com.falcon.warehouse.fragment.ProductLocalisationScannerFragment;
 import com.falcon.warehouse.fragment.ProductScannerFragment;
 import com.falcon.warehouse.module.LocalisationModule;
+import com.falcon.warehouse.module.ProductLocalisationAdapterModule;
 import com.falcon.warehouse.module.ProductLocalisationModule;
 import com.falcon.warehouse.module.ProductModule;
 
@@ -19,7 +21,8 @@ import dagger.Component;
 
 @Singleton
 @Component(modules = {AppModule.class, WarehouseModule.class, RetrofitModule.class,
-        LocalisationModule.class, ProductModule.class, ProductLocalisationModule.class})
+        LocalisationModule.class, ProductModule.class, ProductLocalisationModule.class, ProductLocalisationModule.class,
+        ProductLocalisationAdapterModule.class})
 public interface AppComponent {
 
     void inject(MainActivity mainActivity);
@@ -31,5 +34,6 @@ public interface AppComponent {
     void inject(ProductDetailFragment productDetailFragment);
     void inject(ProductLocalisationFragment productLocalisationFragment);
     void inject(ProductLocalisationScannerFragment productLocalisationScannerFragment);
+    void inject(ProductLocalisationListFragment productLocalisationListFragment);
 
 }

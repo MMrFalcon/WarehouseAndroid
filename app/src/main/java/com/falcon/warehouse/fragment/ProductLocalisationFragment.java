@@ -60,6 +60,9 @@ public class ProductLocalisationFragment extends Fragment {
             ((NavigationHost) getActivity()).navigateTo(scannerFragment, true);
         });
 
+        showAllButton.setOnClickListener( v -> ((NavigationHost) getActivity())
+                .navigateTo(new ProductLocalisationListFragment(), true));
+
         return fragmentView;
     }
 }
