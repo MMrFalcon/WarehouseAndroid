@@ -32,9 +32,55 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
         this.executor = executor;
     }
 
+    /**
+     * Saves only locally
+     *
+     * @param product product for save in Room db
+     */
     @Override
     public void saveProduct(Product product) {
         productDao.saveProduct(product);
+    }
+
+    /**
+     * Saves new product
+     * If executor throw error after api save call, try to save locally only
+     *
+     * @param product new product for save
+     */
+    @Override
+    public void saveNewProduct(Product product) {
+        try {
+            apiSaveProduct(product);
+        } catch (RuntimeException ex) {
+            Log.e("Catching Response", ex.getLocalizedMessage());
+            productDao.saveProduct(product);
+        }
+    }
+
+    private void apiSaveProduct(Product product) {
+        executor.execute(() -> productService.saveProduct(product).enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                executor.execute(() -> {
+                    Product savedProduct = response.body();
+
+                    if (savedProduct == null) {
+                        throw new RuntimeException("Save returns empty object");
+                    } else {
+                        savedProduct.setLastFetchedDate(new Date());
+                        productDao.saveProduct(product);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                throw new RuntimeException("Error in save response");
+            }
+        }));
     }
 
     @Override
@@ -61,15 +107,15 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
                                 product.setLastFetchedDate(new Date());
                                 productDao.saveProduct(product);
                             } else {
-                                Log.i("NULL_OBJECT", "Product is null");
+                                Log.e("NULL_OBJECT", "Product is null");
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Call<Product> call, Throwable t) {
-                        Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
-                        Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                        Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                        Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
                     }
                 });
             }
@@ -99,32 +145,69 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
         return productDao.getAll();
     }
 
+    /**
+     * Update Product
+     * If executor throw error after api update call, try to save locally only
+     *
+     * @param product product for update
+     */
+    @Override
+    public void updateProduct(Product product) {
+        try {
+            apiUpdateProduct(product);
+        } catch (RuntimeException ex) {
+            Log.e("Catching Response", ex.getLocalizedMessage());
+            productDao.updateProduct(product);
+        }
+    }
+
+    private void apiUpdateProduct(Product product) {
+        executor.execute(() -> productService.updateProduct(product).enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                Product savedProduct = response.body();
+
+                if (savedProduct == null) {
+                    throw new RuntimeException("Save returns empty object");
+                } else {
+                    savedProduct.setLastFetchedDate(new Date());
+                    productDao.updateProduct(product);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                throw new RuntimeException("Error in save response");
+            }
+        }));
+    }
+
     private void fetchAllProducts() {
-        executor.execute(() -> {
-            productService.geAllProducts().enqueue(new Callback<List<Product>>() {
-                @Override
-                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-                    executor.execute(() -> {
-                        List<Product> products = response.body();
+        executor.execute(() -> productService.geAllProducts().enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                executor.execute(() -> {
+                    List<Product> products = response.body();
 
-                        if (products != null) {
-                            products.forEach(product -> {
-                                product.setLastFetchedDate(new Date());
-                                productDao.saveProduct(product);
-                            });
-                        }else {
-                            Log.i("NULL_OBJECT", "Product is null");
-                        }
-                    });
-                }
+                    if (products != null) {
+                        products.forEach(product -> {
+                            product.setLastFetchedDate(new Date());
+                            productDao.saveProduct(product);
+                        });
+                    }else {
+                        Log.e("NULL_OBJECT", "Product is null");
+                    }
+                });
+            }
 
-                @Override
-                public void onFailure(Call<List<Product>> call, Throwable t) {
-                    Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
-                    Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
-                }
-            });
-        });
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+            }
+        }));
     }
 
 }

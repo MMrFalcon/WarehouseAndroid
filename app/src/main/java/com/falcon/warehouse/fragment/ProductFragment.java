@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.root.App;
+import com.falcon.warehouse.root.Constants;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -41,6 +42,13 @@ public class ProductFragment extends Fragment {
 
         showAllButton.setOnClickListener(v -> ((NavigationHost) getActivity())
                 .navigateTo(new ProductListFragment(), true));
+
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.INPUT_TYPE, Constants.INSERT);
+        ProductAddEditFragment productAddEditFragment = new ProductAddEditFragment();
+        productAddEditFragment.setArguments(bundle);
+
+        addButton.setOnClickListener(v -> ((NavigationHost) getActivity()).navigateTo(productAddEditFragment, true));
 
         return view;
     }

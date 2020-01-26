@@ -2,6 +2,7 @@ package com.falcon.warehouse.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -36,6 +37,9 @@ public class Product {
 
     @ColumnInfo(name = "last_fetched_date")
     private Date lastFetchedDate;
+
+    @Ignore
+    public Product () {}
 
     public Product(Long id, String productIndex, String productName, BigDecimal quantity) {
         this.id = id;

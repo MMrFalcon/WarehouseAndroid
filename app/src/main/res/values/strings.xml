@@ -15,4 +15,8 @@
     <string name="scan_product">Skanuj Produkt</string>
     <string name="edit">Edytuj</string>
     <string name="delete">Usuń</string>
+    <string name="index">Index</string>
+    <string name="name">Nazwa</string>
+    <string name="quantity">Ilość</string>
+    <string name="save">Zapisz</string>
 </resources>

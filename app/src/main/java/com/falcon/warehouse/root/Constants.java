@@ -9,4 +9,8 @@ public abstract class Constants {
     public static final String SCAN_TYPE_KEY = "scanType";
     public static final String PROD_LOCALISATION_INDEX_KEY = "localisationIndex";
     public static final String PROD_PRODUCT_INDEX_KEY = "productIndex";
+    public static final String INPUT_TYPE = "inputType";
+    public static final String UPDATE = "update";
+    public static final String INSERT = "insert";
+
 }

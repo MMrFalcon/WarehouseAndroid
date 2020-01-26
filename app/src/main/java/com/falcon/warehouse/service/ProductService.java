@@ -5,7 +5,10 @@ import com.falcon.warehouse.entity.Product;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ProductService {
@@ -15,4 +18,10 @@ public interface ProductService {
 
     @GET("product")
     Call<List<Product>> geAllProducts();
+
+    @POST("product")
+    Call<Product> saveProduct(@Body Product product);
+
+    @PUT("product")
+    Call<Product> updateProduct(@Body Product product);
 }

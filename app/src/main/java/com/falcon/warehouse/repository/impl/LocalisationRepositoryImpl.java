@@ -32,9 +32,56 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
         this.executor = executor;
     }
 
+    /**
+     * Saves only locally
+     *
+     * @param localisation localisation for save in Room db
+     */
     @Override
     public void saveLocalisation(Localisation localisation) {
         localisationDao.saveLocalisation(localisation);
+    }
+
+    /**
+     * Saves new localisation
+     * If executor throw error after api save call, try to save locally only
+     *
+     * @param localisation new localisation for save
+     */
+    @Override
+    public void saveNewLocalisation(Localisation localisation) {
+        try {
+            apiSaveLocalisation(localisation);
+        } catch (RuntimeException ex) {
+            Log.e("Catching Response", ex.getLocalizedMessage());
+            localisationDao.saveLocalisation(localisation);
+        }
+
+    }
+
+    private void apiSaveLocalisation(Localisation localisation) {
+        executor.execute(() -> localisationService.saveLocalisation(localisation).enqueue(new Callback<Localisation>() {
+            @Override
+            public void onResponse(Call<Localisation> call, Response<Localisation> response) {
+                executor.execute(() -> {
+                    Localisation savedLocalisation = response.body();
+
+                    if (savedLocalisation == null) {
+                        throw new RuntimeException("Save returns empty object");
+                    } else {
+                        localisation.setLastFetchedDate(new Date());
+                        localisationDao.updateLocalisation(localisation);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<Localisation> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                throw new RuntimeException("Error in save response");
+            }
+        }));
     }
 
     @Override
@@ -70,32 +117,71 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
         return localisationDao.getAll();
     }
 
+    /**
+     * Update localisation
+     * If executor throw error after api update call, try to save locally only
+     *
+     * @param localisation localisation for update
+     */
+    @Override
+    public void updateLocalisation(Localisation localisation) {
+        try {
+            apiUpdateLocalisation(localisation);
+        } catch (RuntimeException ex) {
+            Log.e("Catching Response", ex.getLocalizedMessage());
+            localisationDao.updateLocalisation(localisation);
+        }
+    }
+
+    private void apiUpdateLocalisation(Localisation localisation) {
+        executor.execute(() -> localisationService.updateLocalisation(localisation).enqueue(new Callback<Localisation>() {
+            @Override
+            public void onResponse(Call<Localisation> call, Response<Localisation> response) {
+                executor.execute(() -> {
+                    Localisation savedLocalisation = response.body();
+
+                    if (savedLocalisation == null) {
+                        throw new RuntimeException("Save returns empty object");
+                    } else {
+                        localisation.setLastFetchedDate(new Date());
+                        localisationDao.updateLocalisation(localisation);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<Localisation> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                throw new RuntimeException("Error in save response");
+            }
+        }));
+    }
+
     private void fetchAllLocalisations() {
-        executor.execute(() -> {
-            localisationService.getAllLocalisations().enqueue(new Callback<List<Localisation>>() {
-                @Override
-                public void onResponse(Call<List<Localisation>> call, Response<List<Localisation>> response) {
-                    executor.execute(() -> {
-                        List<Localisation> localisations = response.body();
+        executor.execute(() -> localisationService.getAllLocalisations().enqueue(new Callback<List<Localisation>>() {
+            @Override
+            public void onResponse(Call<List<Localisation>> call, Response<List<Localisation>> response) {
+                executor.execute(() -> {
+                    List<Localisation> localisations = response.body();
 
-                        if (localisations != null) {
-                            localisations.forEach(localisation -> {
-                                localisation.setLastFetchedDate(new Date());
-                                localisationDao.saveLocalisation(localisation);
-                            });
-                        }else {
-                            Log.i("NULL_OBJECT", "Localisation is null");
-                        }
-                    });
-                }
+                    if (localisations != null) {
+                        localisations.forEach(localisation -> {
+                            localisation.setLastFetchedDate(new Date());
+                            localisationDao.saveLocalisation(localisation);
+                        });
+                    }else {
+                        Log.e("NULL_OBJECT", "Localisation is null");
+                    }
+                });
+            }
 
-                @Override
-                public void onFailure(Call<List<Localisation>> call, Throwable t) {
-                    Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
-                    Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
-                }
-            });
-        });
+            @Override
+            public void onFailure(Call<List<Localisation>> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+            }
+        }));
     }
 
     private void fetchLocalisationByIndex(final String localisationIndex) {
@@ -113,15 +199,15 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
                                 localisation.setLastFetchedDate(new Date());
                                 localisationDao.saveLocalisation(localisation);
                             } else {
-                                Log.i("NULL_OBJECT", "Localisation is null");
+                                Log.e("NULL_OBJECT", "Localisation is null");
                             }
                         });
                     }
 
                     @Override
                     public void onFailure(Call<Localisation> call, Throwable t) {
-                        Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
-                        Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                        Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                        Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
                     }
                 });
             }

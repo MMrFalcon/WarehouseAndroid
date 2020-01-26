@@ -1,11 +1,14 @@
 package com.falcon.warehouse.module;
 
+import com.falcon.warehouse.contract.IProductAddUpdateContract;
 import com.falcon.warehouse.contract.IProductDetailContract;
 import com.falcon.warehouse.contract.IProductListContract;
 import com.falcon.warehouse.contract.IProductScannerContract;
+import com.falcon.warehouse.model.ProductAddEditModel;
 import com.falcon.warehouse.model.ProductDetailModel;
 import com.falcon.warehouse.model.ProductListModel;
 import com.falcon.warehouse.model.ProductScannerModel;
+import com.falcon.warehouse.presenter.ProductAddEditPresenter;
 import com.falcon.warehouse.presenter.ProductDetailPresenter;
 import com.falcon.warehouse.presenter.ProductListPresenter;
 import com.falcon.warehouse.presenter.ProductScannerPresenter;
@@ -53,5 +56,17 @@ public class ProductModule {
     @Provides
     public IProductListContract.Model provideListModel(ProductRepository productRepository) {
         return new ProductListModel(productRepository);
+    }
+
+    @Singleton
+    @Provides
+    public IProductAddUpdateContract.Presenter provideAddUpdatePresenter(IProductAddUpdateContract.Model model) {
+        return new ProductAddEditPresenter(model);
+    }
+
+    @Singleton
+    @Provides
+    public  IProductAddUpdateContract.Model provideAddUpdateModel(ProductRepository productRepository) {
+        return new ProductAddEditModel(productRepository);
     }
 }

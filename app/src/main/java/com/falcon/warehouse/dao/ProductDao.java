@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.falcon.warehouse.entity.Product;
 
@@ -18,6 +19,9 @@ public interface ProductDao {
     @Insert(onConflict = REPLACE)
     void saveProduct(Product product);
 
+    @Insert(onConflict = REPLACE)
+    void saveNewProduct(Product product);
+
     @Query("SELECT * FROM product WHERE product_index LIKE :productIndex LIMIT 1")
     LiveData<Product> getProductByIndex(String productIndex);
 
@@ -29,5 +33,8 @@ public interface ProductDao {
 
     @Query("SELECT * FROM product ORDER BY product_id")
     LiveData<List<Product>> getAll();
+
+    @Update(onConflict = REPLACE)
+    void updateProduct(Product product);
 
 }

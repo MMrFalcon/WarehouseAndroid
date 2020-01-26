@@ -1,10 +1,12 @@
 package com.falcon.warehouse.root;
 
 import com.falcon.warehouse.MainActivity;
+import com.falcon.warehouse.fragment.LocalisationAddEditFragment;
 import com.falcon.warehouse.fragment.LocalisationDetailFragment;
 import com.falcon.warehouse.fragment.LocalisationFragment;
 import com.falcon.warehouse.fragment.LocalisationListFragment;
 import com.falcon.warehouse.fragment.LocalisationScannerFragment;
+import com.falcon.warehouse.fragment.ProductAddEditFragment;
 import com.falcon.warehouse.fragment.ProductDetailFragment;
 import com.falcon.warehouse.fragment.ProductFragment;
 import com.falcon.warehouse.fragment.ProductListFragment;
@@ -41,5 +43,7 @@ public interface AppComponent {
     void inject(ProductLocalisationListFragment productLocalisationListFragment);
     void inject(ProductListFragment productListFragment);
     void inject(LocalisationListFragment localisationListFragment);
+    void inject(ProductAddEditFragment productAddEditFragment);
+    void inject(LocalisationAddEditFragment localisationAddEditFragment);
 
 }

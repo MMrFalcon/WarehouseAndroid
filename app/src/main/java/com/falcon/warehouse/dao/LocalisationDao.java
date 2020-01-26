@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.falcon.warehouse.entity.Localisation;
 
@@ -18,6 +19,9 @@ public interface LocalisationDao {
     @Insert(onConflict = REPLACE)
     void saveLocalisation(Localisation localisation);
 
+    @Insert(onConflict = REPLACE)
+    void saveNewLocalisation(Localisation localisation);
+
     @Query("SELECT * FROM localisation WHERE localisation_index LIKE :localisationIndex LIMIT 1")
     LiveData<Localisation> getLocalisationByIndex(String localisationIndex);
 
@@ -29,4 +33,7 @@ public interface LocalisationDao {
 
     @Query("SELECT * FROM localisation ORDER BY localisation_id")
     LiveData<List<Localisation>> getAll();
+
+    @Update(onConflict = REPLACE)
+    void updateLocalisation(Localisation localisation);
 }

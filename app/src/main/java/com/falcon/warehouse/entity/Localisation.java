@@ -2,6 +2,7 @@ package com.falcon.warehouse.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -30,6 +31,11 @@ public class Localisation {
 
     @ColumnInfo(name = "last_fetched_date")
     private Date lastFetchedDate;
+
+    @Ignore
+    public Localisation() {
+
+    }
 
     public Localisation(Long id, String localisationIndex, String localisationName) {
         this.id = id;
