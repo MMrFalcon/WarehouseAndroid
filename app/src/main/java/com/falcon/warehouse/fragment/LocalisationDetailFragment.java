@@ -10,11 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 
+import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.contract.ILocalisationDetailContract;
 import com.falcon.warehouse.entity.Localisation;
 import com.falcon.warehouse.root.App;
 import com.falcon.warehouse.root.Constants;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import javax.inject.Inject;
@@ -27,6 +29,8 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
     private MaterialTextView localisationId;
     private MaterialTextView localisationName;
     private MaterialTextView localisationIndex;
+    private MaterialButton edit;
+    private MaterialButton delete;
 
     @Nullable
     @Override
@@ -37,6 +41,8 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
         localisationId = fragmentView.findViewById(R.id.localisationId);
         localisationName = fragmentView.findViewById(R.id.localisationName);
         localisationIndex = fragmentView.findViewById(R.id.localisationIndex);
+        edit = fragmentView.findViewById(R.id.editLoc);
+        delete = fragmentView.findViewById(R.id.removeLoc);
 
         presenter.attachView(this);
 
@@ -49,6 +55,18 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
             presenter.setLocalisationToTextView("");
         }
 
+        edit.setOnClickListener(v -> {
+
+            Bundle bundleForUpdate = new Bundle();
+            String localisationIndexCleanText = localisationIndex.getText().toString().replace("Index: ", "");
+            bundleForUpdate.putString(Constants.SCAN_LOCALISATION_KEY, localisationIndexCleanText);
+            bundleForUpdate.putString(Constants.INPUT_TYPE, Constants.UPDATE);
+
+            LocalisationAddEditFragment localisationAddEditFragment = new LocalisationAddEditFragment();
+            localisationAddEditFragment.setArguments(bundleForUpdate);
+
+            ((NavigationHost) getActivity()).navigateTo(localisationAddEditFragment, true);
+        });
 
         return fragmentView;
     }

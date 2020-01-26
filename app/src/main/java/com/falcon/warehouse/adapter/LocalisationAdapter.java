@@ -1,5 +1,6 @@
 package com.falcon.warehouse.adapter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,8 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.entity.Localisation;
+import com.falcon.warehouse.fragment.LocalisationAddEditFragment;
+import com.falcon.warehouse.fragment.LocalisationListFragment;
+import com.falcon.warehouse.root.Constants;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -18,9 +23,11 @@ import java.util.List;
 public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapter.ViewHolder> {
 
     private List<Localisation> localisations;
+    private LocalisationListFragment localisationListFragment;
 
     public LocalisationAdapter() {
         this.localisations = new ArrayList<>();
+
     }
 
     @NonNull
@@ -49,6 +56,10 @@ public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapte
         notifyDataSetChanged();
     }
 
+    public void attachFragment(LocalisationListFragment localisationListFragment) {
+        this.localisationListFragment = localisationListFragment;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         public MaterialTextView localisationId;
@@ -65,6 +76,18 @@ public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapte
             localisationName = itemView.findViewById(R.id.localisationName);
             edit = itemView.findViewById(R.id.editLoc);
             remove = itemView.findViewById(R.id.removeLoc);
+
+            edit.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                String localisationIndexCleanText = localisationIndex.getText().toString().replace("Index Lokalizacji: ", "");
+                bundle.putString(Constants.SCAN_LOCALISATION_KEY, localisationIndexCleanText);
+                bundle.putString(Constants.INPUT_TYPE, Constants.UPDATE);
+
+                LocalisationAddEditFragment localisationAddEditFragment = new LocalisationAddEditFragment();
+                localisationAddEditFragment.setArguments(bundle);
+
+                ((NavigationHost) localisationListFragment.getActivity()).navigateTo(localisationAddEditFragment, true);
+            });
         }
     }
 }

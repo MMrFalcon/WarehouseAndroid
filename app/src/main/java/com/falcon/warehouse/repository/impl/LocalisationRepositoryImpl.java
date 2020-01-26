@@ -195,7 +195,7 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
                     public void onResponse(Call<Localisation> call, Response<Localisation> response) {
                         executor.execute(() -> {
                             Localisation localisation = response.body();
-                            if (localisation!= null) {
+                            if (localisation != null) {
                                 localisation.setLastFetchedDate(new Date());
                                 localisationDao.saveLocalisation(localisation);
                             } else {

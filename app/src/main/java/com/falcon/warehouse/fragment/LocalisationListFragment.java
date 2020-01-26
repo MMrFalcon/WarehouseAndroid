@@ -46,6 +46,7 @@ public class LocalisationListFragment extends Fragment implements ILocalisationL
         recyclerView.setAdapter(localisationAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        localisationAdapter.attachFragment(this);
 
         return fragmentView;
     }
@@ -54,6 +55,7 @@ public class LocalisationListFragment extends Fragment implements ILocalisationL
     public void onResume() {
         super.onResume();
         presenter.attachView(this);
+        localisationAdapter.attachFragment(this);
     }
 
     @Override

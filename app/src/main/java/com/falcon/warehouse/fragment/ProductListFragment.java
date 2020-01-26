@@ -42,6 +42,8 @@ public class ProductListFragment extends Fragment implements IProductListContrac
         presenter.attachView(this);
         presenter.fillList();
 
+        productAdapter.attachFragment(this);
+
         recyclerView = fragmentView.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(productAdapter);
         recyclerView.setHasFixedSize(true);
@@ -54,6 +56,7 @@ public class ProductListFragment extends Fragment implements IProductListContrac
     public void onResume() {
         super.onResume();
         presenter.attachView(this);
+        productAdapter.attachFragment(this);
     }
 
     @Override

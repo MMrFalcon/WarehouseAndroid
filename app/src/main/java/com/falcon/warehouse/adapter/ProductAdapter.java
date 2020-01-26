@@ -1,5 +1,6 @@
 package com.falcon.warehouse.adapter;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,8 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.entity.Product;
+import com.falcon.warehouse.fragment.ProductAddEditFragment;
+import com.falcon.warehouse.fragment.ProductListFragment;
+import com.falcon.warehouse.root.Constants;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -19,6 +24,7 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private List<Product> productList;
+    private ProductListFragment productListFragment;
 
     public ProductAdapter() {
         this.productList = new ArrayList<>();
@@ -53,6 +59,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         notifyDataSetChanged();
     }
 
+    public void attachFragment(ProductListFragment productListFragment) {
+        this.productListFragment = productListFragment;
+    }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -72,6 +81,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             quantity = itemView.findViewById(R.id.productQuantity);
             edit = itemView.findViewById(R.id.editProd);
             remove = itemView.findViewById(R.id.removeProd);
+
+            edit.setOnClickListener(v -> {
+                Bundle bundle = new Bundle();
+                String productIndexCleanText = productIndex.getText().toString().replace("Index Produktu: ", "");
+                bundle.putString(Constants.SCAN_PRODUCT_KEY, productIndexCleanText);
+                bundle.putString(Constants.INPUT_TYPE, Constants.UPDATE);
+
+                ProductAddEditFragment productAddEditFragment = new ProductAddEditFragment();
+                productAddEditFragment.setArguments(bundle);
+
+                ((NavigationHost) productListFragment.getActivity()).navigateTo(productAddEditFragment, true);
+            });
         }
     }
 }

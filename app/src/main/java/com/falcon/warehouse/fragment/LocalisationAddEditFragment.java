@@ -47,8 +47,16 @@ public class LocalisationAddEditFragment extends Fragment implements ILocalisati
         save = fragmentView.findViewById(R.id.saveLocalisation);
         id = fragmentView.findViewById(R.id.localisationId);
 
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null) {
+            if (Objects.equals(bundle.getString(Constants.INPUT_TYPE), Constants.UPDATE)) {
+                presenter.setFormData(bundle.getString(Constants.SCAN_LOCALISATION_KEY));
+            }
+        }
+
         save.setOnClickListener(v -> {
-            Bundle bundle = this.getArguments();
+
             if (bundle != null) {
                 if (Objects.equals(bundle.getString(Constants.INPUT_TYPE), Constants.INSERT)) {
                     presenter.saveData();

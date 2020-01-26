@@ -10,15 +10,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 
+import com.falcon.warehouse.NavigationHost;
 import com.falcon.warehouse.R;
 import com.falcon.warehouse.contract.IProductDetailContract;
 import com.falcon.warehouse.entity.Product;
 import com.falcon.warehouse.root.App;
 import com.falcon.warehouse.root.Constants;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 import javax.inject.Inject;
 
@@ -28,6 +29,8 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
     private MaterialTextView productIndex;
     private MaterialTextView productName;
     private MaterialTextView productQuantity;
+    private MaterialButton edit;
+    private MaterialButton delete;
 
     @Inject
     IProductDetailContract.Presenter presenter;
@@ -44,6 +47,8 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
         productIndex = fragmentView.findViewById(R.id.productIndex);
         productName = fragmentView.findViewById(R.id.productName);
         productQuantity = fragmentView.findViewById(R.id.productQuantity);
+        edit = fragmentView.findViewById(R.id.editProd);
+        delete = fragmentView.findViewById(R.id.removeProd);
 
         //update by index or fetch last scanned data
         Bundle bundle = this.getArguments();
@@ -53,7 +58,17 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
             presenter.setProductToTextView("");
         }
 
+        edit.setOnClickListener(v -> {
+            Bundle bundleForUpdate = new Bundle();
+            String productIndexCleanText = productIndex.getText().toString().replace("Index: ", "");
+            bundleForUpdate.putString(Constants.SCAN_PRODUCT_KEY, productIndexCleanText);
+            bundleForUpdate.putString(Constants.INPUT_TYPE, Constants.UPDATE);
 
+            ProductAddEditFragment productAddEditFragment = new ProductAddEditFragment();
+            productAddEditFragment.setArguments(bundleForUpdate);
+
+            ((NavigationHost) getActivity()).navigateTo(productAddEditFragment, true);
+        });
         return fragmentView;
     }
 
@@ -103,7 +118,6 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
 
     @Override
     public void setQuantity(BigDecimal quantity) {
-        DecimalFormat df = new DecimalFormat("#,###.00");
-        this.productQuantity.setText("Ilość: " + df.format(quantity));
+        this.productQuantity.setText("Ilość: " + quantity.toString());
     }
 }

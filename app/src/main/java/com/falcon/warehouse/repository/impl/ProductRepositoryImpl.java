@@ -165,14 +165,17 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
         executor.execute(() -> productService.updateProduct(product).enqueue(new Callback<Product>() {
             @Override
             public void onResponse(Call<Product> call, Response<Product> response) {
-                Product savedProduct = response.body();
+               executor.execute(() -> {
+                   Product savedProduct = response.body();
 
-                if (savedProduct == null) {
-                    throw new RuntimeException("Save returns empty object");
-                } else {
-                    savedProduct.setLastFetchedDate(new Date());
-                    productDao.updateProduct(product);
-                }
+                   if (savedProduct == null) {
+                       throw new RuntimeException("Save returns empty object");
+                   } else {
+                       savedProduct.setLastFetchedDate(new Date());
+                       productDao.updateProduct(product);
+                   }
+               });
+
             }
 
             @Override

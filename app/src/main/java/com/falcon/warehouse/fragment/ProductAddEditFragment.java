@@ -19,7 +19,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -51,8 +50,16 @@ public class ProductAddEditFragment extends Fragment implements IProductAddUpdat
         save = fragmentView.findViewById(R.id.saveProduct);
         id = fragmentView.findViewById(R.id.productId);
 
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null) {
+            if (Objects.equals(bundle.getString(Constants.INPUT_TYPE), Constants.UPDATE)) {
+                presenter.setFormData(bundle.getString(Constants.SCAN_PRODUCT_KEY));
+            }
+        }
+
         save.setOnClickListener(v -> {
-            Bundle bundle = this.getArguments();
+
             if (bundle != null) {
                 if (Objects.equals(bundle.getString(Constants.INPUT_TYPE), Constants.INSERT)) {
                     presenter.saveData();
@@ -103,8 +110,7 @@ public class ProductAddEditFragment extends Fragment implements IProductAddUpdat
 
     @Override
     public void setQuantity(BigDecimal quantity) {
-        DecimalFormat df = new DecimalFormat("#,###.00");
-        this.quantity.setText(df.format(quantity));
+        this.quantity.setText(quantity.toString());
     }
 
     @Override
