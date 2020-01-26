@@ -20,4 +20,9 @@ public class ProductListModel implements IProductListContract.Model {
     public LiveData<List<Product>> getAll() {
         return productRepository.getAll();
     }
+
+    @Override
+    public void deleteProduct(Product product) {
+        productRepository.deleteProduct(product);
+    }
 }

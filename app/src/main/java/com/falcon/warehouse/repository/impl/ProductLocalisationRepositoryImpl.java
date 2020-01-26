@@ -132,6 +132,37 @@ public class ProductLocalisationRepositoryImpl extends BaseRepositoryImpl implem
         return productLocalisationDao.getAll();
     }
 
+    @Override
+    public void delete(ProductLocalisation productLocalisation) {
+        try {
+            apiDelete(productLocalisation);
+        } catch (RuntimeException ex) {
+            Log.e("Catching Response", ex.getLocalizedMessage());
+            productLocalisationDao.delete(productLocalisation);
+        }
+    }
+
+    @Override
+    public void deleteAll() {
+        productLocalisationDao.deleteAll();
+    }
+
+    private void apiDelete(ProductLocalisation productLocalisation) {
+        executor.execute(() -> productLocalisationService.delete(productLocalisation).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                executor.execute(() -> productLocalisationDao.delete(productLocalisation));
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                throw new RuntimeException("Error in delete response");
+            }
+        }));
+    }
+
     private void fetchAll() {
         executor.execute(() -> productLocalisationService.getAll().enqueue(new Callback<List<ProductLocalisation>>() {
             @Override
@@ -140,6 +171,8 @@ public class ProductLocalisationRepositoryImpl extends BaseRepositoryImpl implem
                     List<ProductLocalisation> productLocalisations = response.body();
 
                     if (productLocalisations != null) {
+                        //Cleaning local table
+                        deleteAll();
                         productLocalisations.forEach(productLocalisation -> {
                             productLocalisation.setLastFetchedDate(new Date());
                             productLocalisationDao.saveProductLocalisation(productLocalisation);

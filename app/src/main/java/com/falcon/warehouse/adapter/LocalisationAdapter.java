@@ -42,7 +42,7 @@ public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapte
         Localisation localisation = localisations.get(position);
 
         holder.localisationIndex.setText("Index Lokalizacji: " + localisation.getLocalisationIndex());
-        holder.localisationId.setText("ID: " + localisation.getId());
+        holder.localisationId.setText("ID: " + localisation.getId().toString());
         holder.localisationName.setText("Nazwa: " + localisation.getLocalisationName());
     }
 
@@ -71,15 +71,16 @@ public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            localisationId = itemView.findViewById(R.id.localisationId);
-            localisationIndex = itemView.findViewById(R.id.localisationIndex);
-            localisationName = itemView.findViewById(R.id.localisationName);
+            localisationId = itemView.findViewById(R.id.localisationDetailId);
+            localisationIndex = itemView.findViewById(R.id.localisationDetailIndex);
+            localisationName = itemView.findViewById(R.id.localisationDetailName);
             edit = itemView.findViewById(R.id.editLoc);
             remove = itemView.findViewById(R.id.removeLoc);
 
             edit.setOnClickListener(v -> {
-                Bundle bundle = new Bundle();
                 String localisationIndexCleanText = localisationIndex.getText().toString().replace("Index Lokalizacji: ", "");
+
+                Bundle bundle = new Bundle();
                 bundle.putString(Constants.SCAN_LOCALISATION_KEY, localisationIndexCleanText);
                 bundle.putString(Constants.INPUT_TYPE, Constants.UPDATE);
 
@@ -87,6 +88,21 @@ public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapte
                 localisationAddEditFragment.setArguments(bundle);
 
                 ((NavigationHost) localisationListFragment.getActivity()).navigateTo(localisationAddEditFragment, true);
+            });
+
+            remove.setOnClickListener(v -> {
+                String localisationIndexCleanText = localisationIndex.getText().toString().replace("Index Lokalizacji: ", "");
+                String localisationIdCleanText = localisationId.getText().toString().replace("ID: ", "");
+                String localisationNameCleanText = localisationName.getText().toString().replace("Nazwa: ", "");
+                Localisation localisation = new Localisation();
+                localisation.setId(Long.valueOf(localisationIdCleanText));
+                localisation.setLocalisationIndex(localisationIndexCleanText);
+                localisation.setLocalisationName(localisationNameCleanText);
+
+                localisationListFragment.getPresenter().deleteLocalisation(localisation);
+
+                ((NavigationHost) localisationListFragment.getActivity()).navigateTo(new LocalisationListFragment(), true);
+
             });
         }
     }

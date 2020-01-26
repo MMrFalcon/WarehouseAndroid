@@ -7,6 +7,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -24,4 +25,7 @@ public interface ProductService {
 
     @PUT("product")
     Call<Product> updateProduct(@Body Product product);
+
+    @HTTP(method = "DELETE", path = "product", hasBody = true)
+    Call<Void> delteProduct(@Body Product product);
 }

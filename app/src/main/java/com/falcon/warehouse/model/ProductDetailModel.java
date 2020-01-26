@@ -18,4 +18,9 @@ public class ProductDetailModel implements IProductDetailContract.Model {
     public LiveData<Product> getProductByIndex(String productIndex) {
         return productRepository.getProductByIndex(productIndex);
     }
+
+    @Override
+    public void deleteProduct(Product product) {
+        productRepository.deleteProduct(product);
+    }
 }

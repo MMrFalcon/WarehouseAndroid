@@ -161,6 +161,37 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
         }
     }
 
+    @Override
+    public void deleteProduct(Product product) {
+        try {
+            apiDelete(product);
+        } catch (RuntimeException ex) {
+            Log.e("Catching Response", ex.getLocalizedMessage());
+            productDao.deleteProduct(product);
+        }
+    }
+
+    @Override
+    public void deleteAll() {
+        productDao.deleteAll();
+    }
+
+    private void apiDelete(Product product) {
+        executor.execute(() -> productService.delteProduct(product).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                executor.execute(() -> productDao.deleteProduct(product));
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                throw new RuntimeException("Error in delete response");
+            }
+        }));
+    }
+
     private void apiUpdateProduct(Product product) {
         executor.execute(() -> productService.updateProduct(product).enqueue(new Callback<Product>() {
             @Override
@@ -195,6 +226,8 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
                     List<Product> products = response.body();
 
                     if (products != null) {
+                        //cleaning local table
+                        deleteAll();
                         products.forEach(product -> {
                             product.setLastFetchedDate(new Date());
                             productDao.saveProduct(product);

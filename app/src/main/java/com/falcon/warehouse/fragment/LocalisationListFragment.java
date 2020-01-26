@@ -51,10 +51,15 @@ public class LocalisationListFragment extends Fragment implements ILocalisationL
         return fragmentView;
     }
 
+    public ILocalisationListContract.Presenter getPresenter() {
+        return this.presenter;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         presenter.attachView(this);
+        presenter.fillList();
         localisationAdapter.attachFragment(this);
     }
 

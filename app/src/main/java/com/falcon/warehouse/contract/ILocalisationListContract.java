@@ -10,6 +10,7 @@ public interface ILocalisationListContract {
 
     interface Model {
         LiveData<List<Localisation>> getAll();
+        void deleteLocalisation(Localisation localisation);
     }
 
     interface View {
@@ -18,6 +19,7 @@ public interface ILocalisationListContract {
 
     interface Presenter extends BasePresenter<View> {
         void fillList();
+        void deleteLocalisation(Localisation localisation);
     }
 
 }

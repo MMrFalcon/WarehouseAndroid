@@ -22,4 +22,9 @@ public class LocalisationListPresenter extends BasePresenterImpl<ILocalisationLi
         LiveData<List<Localisation>> localisations = model.getAll();
         view.addItems(localisations);
     }
+
+    @Override
+    public void deleteLocalisation(Localisation localisation) {
+       model.deleteLocalisation(localisation);
+    }
 }

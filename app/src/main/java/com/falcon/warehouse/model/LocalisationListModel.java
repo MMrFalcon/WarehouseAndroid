@@ -20,4 +20,9 @@ public class LocalisationListModel implements ILocalisationListContract.Model {
     public LiveData<List<Localisation>> getAll() {
         return localisationRepository.getAll();
     }
+
+    @Override
+    public void deleteLocalisation(Localisation localisation) {
+        localisationRepository.deleteLocalisation(localisation);
+    }
 }

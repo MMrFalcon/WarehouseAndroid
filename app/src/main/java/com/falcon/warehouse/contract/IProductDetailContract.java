@@ -10,6 +10,7 @@ public interface IProductDetailContract {
 
     interface Model {
         LiveData<Product> getProductByIndex(String productIndex);
+        void deleteProduct(Product product);
     }
 
     interface View {
@@ -18,9 +19,14 @@ public interface IProductDetailContract {
         void setProductIndex(String productIndex);
         void setProductName(String productName);
         void setQuantity(BigDecimal quantity);
+        Long getProductId();
+        String getProductIndex();
+        String getProductName();
+        BigDecimal getProductQuantity();
     }
 
     interface Presenter extends BasePresenter<View> {
         void setProductToTextView(String productIndex);
+        void delete();
     }
 }

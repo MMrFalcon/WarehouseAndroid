@@ -22,4 +22,9 @@ public class ProductListPresenter extends BasePresenterImpl<IProductListContract
         LiveData<List<Product>> products = model.getAll();
         view.addItems(products);
     }
+
+    @Override
+    public void removeProduct(Product product) {
+        model.deleteProduct(product);
+    }
 }

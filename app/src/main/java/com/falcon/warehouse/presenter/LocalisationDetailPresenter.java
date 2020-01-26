@@ -20,4 +20,13 @@ public class LocalisationDetailPresenter extends BasePresenterImpl<ILocalisation
         view.setLocalisation(localisationLiveData);
     }
 
+    @Override
+    public void delete() {
+        Localisation localisation = new Localisation();
+        localisation.setId(view.getLocalisationId());
+        localisation.setLocalisationName(view.getName());
+        localisation.setLocalisationIndex(view.getIndex());
+        model.deleteLocalisation(localisation);
+    }
+
 }

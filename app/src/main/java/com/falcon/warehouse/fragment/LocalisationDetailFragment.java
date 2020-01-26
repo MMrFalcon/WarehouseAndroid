@@ -38,9 +38,9 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
         ((App) this.getActivity().getApplication()).getComponent().inject(this);
         View fragmentView = inflater.inflate(R.layout.localisation_detail_fragment, container, false);
 
-        localisationId = fragmentView.findViewById(R.id.localisationId);
-        localisationName = fragmentView.findViewById(R.id.localisationName);
-        localisationIndex = fragmentView.findViewById(R.id.localisationIndex);
+        localisationId = fragmentView.findViewById(R.id.localisationDetailId);
+        localisationName = fragmentView.findViewById(R.id.localisationDetailName);
+        localisationIndex = fragmentView.findViewById(R.id.localisationDetailIndex);
         edit = fragmentView.findViewById(R.id.editLoc);
         delete = fragmentView.findViewById(R.id.removeLoc);
 
@@ -66,6 +66,12 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
             localisationAddEditFragment.setArguments(bundleForUpdate);
 
             ((NavigationHost) getActivity()).navigateTo(localisationAddEditFragment, true);
+        });
+
+        delete.setOnClickListener( v -> {
+            presenter.delete();
+
+            ((NavigationHost) getActivity()).navigateTo(new LocalisationListFragment(), true);
         });
 
         return fragmentView;
@@ -113,5 +119,21 @@ public class LocalisationDetailFragment extends Fragment implements ILocalisatio
     @Override
     public void setLocalisationName(String localisationName) {
         this.localisationName.setText("Nazwa: " + localisationName);
+    }
+
+    @Override
+    public Long getLocalisationId() {
+        String localisationIdCleanText = localisationId.getText().toString().replace("ID: ", "");
+        return Long.valueOf(localisationIdCleanText);
+    }
+
+    @Override
+    public String getIndex() {
+        return localisationIndex.getText().toString().replace("Index: ", "");
+    }
+
+    @Override
+    public String getName() {
+        return localisationName.getText().toString().replace("Nazwa: ", "");
     }
 }

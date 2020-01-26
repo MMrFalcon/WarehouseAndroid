@@ -52,10 +52,15 @@ public class ProductListFragment extends Fragment implements IProductListContrac
         return fragmentView;
     }
 
+    public IProductListContract.Presenter getPresenter() {
+        return this.presenter;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         presenter.attachView(this);
+        presenter.fillList();
         productAdapter.attachFragment(this);
     }
 

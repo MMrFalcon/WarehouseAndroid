@@ -69,6 +69,13 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
 
             ((NavigationHost) getActivity()).navigateTo(productAddEditFragment, true);
         });
+
+        delete.setOnClickListener(v -> {
+            presenter.delete();
+
+            ((NavigationHost) getActivity()).navigateTo(new ProductListFragment(), false);
+        });
+
         return fragmentView;
     }
 
@@ -119,5 +126,25 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
     @Override
     public void setQuantity(BigDecimal quantity) {
         this.productQuantity.setText("Ilość: " + quantity.toString());
+    }
+
+    @Override
+    public Long getProductId() {
+        return Long.valueOf(productId.getText().toString().replace("ID: ", ""));
+    }
+
+    @Override
+    public String getProductIndex() {
+        return productIndex.getText().toString().replace("Index: ", "");
+    }
+
+    @Override
+    public String getProductName() {
+        return productName.getText().toString().replace("Nazwa: ", "");
+    }
+
+    @Override
+    public BigDecimal getProductQuantity() {
+        return new BigDecimal(productQuantity.getText().toString().replace("Ilość: ", ""));
     }
 }

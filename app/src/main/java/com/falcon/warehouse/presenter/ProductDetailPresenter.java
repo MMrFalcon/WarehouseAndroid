@@ -20,4 +20,15 @@ public class ProductDetailPresenter extends BasePresenterImpl<IProductDetailCont
         LiveData<Product> productLiveData = model.getProductByIndex(productIndex);
         view.setProduct(productLiveData);
     }
+
+    @Override
+    public void delete() {
+        Product product = new Product();
+        product.setId(view.getProductId());
+        product.setQuantity(view.getProductQuantity());
+        product.setProductName(view.getProductName());
+        product.setProductIndex(view.getProductIndex());
+
+        model.deleteProduct(product);
+    }
 }

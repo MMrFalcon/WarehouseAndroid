@@ -19,4 +19,9 @@ public class LocalisationDetailModel implements ILocalisationDetailContract.Mode
     public LiveData<Localisation> getLocalisationByIndex(String localisationIndex) {
         return localisationRepository.getLocalisationByIndex(localisationIndex);
     }
+
+    @Override
+    public void deleteLocalisation(Localisation localisation) {
+        localisationRepository.deleteLocalisation(localisation);
+    }
 }

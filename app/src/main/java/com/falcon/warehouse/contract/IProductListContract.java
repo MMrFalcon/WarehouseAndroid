@@ -10,6 +10,7 @@ public interface IProductListContract {
 
     interface Model {
         LiveData<List<Product>> getAll();
+        void deleteProduct(Product product);
     }
 
     interface View {
@@ -18,5 +19,6 @@ public interface IProductListContract {
 
     interface Presenter extends BasePresenter<View> {
         void fillList();
+        void removeProduct(Product product);
     }
 }

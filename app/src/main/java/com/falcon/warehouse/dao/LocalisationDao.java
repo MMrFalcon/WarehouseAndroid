@@ -2,6 +2,7 @@ package com.falcon.warehouse.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -36,4 +37,10 @@ public interface LocalisationDao {
 
     @Update(onConflict = REPLACE)
     void updateLocalisation(Localisation localisation);
+
+    @Delete
+    void deleteLocalisation(Localisation localisation);
+
+    @Query("DELETE FROM localisation")
+    void deleteAll();
 }

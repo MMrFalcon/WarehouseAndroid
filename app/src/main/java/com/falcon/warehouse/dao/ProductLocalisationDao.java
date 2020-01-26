@@ -2,6 +2,7 @@ package com.falcon.warehouse.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -35,4 +36,10 @@ public interface ProductLocalisationDao {
 
     @Query("SELECT * FROM product_localisation ORDER BY product_localisation_id")
     LiveData<List<ProductLocalisation>> getAll();
+
+    @Delete
+    void delete(ProductLocalisation productLocalisation);
+
+    @Query("DELETE FROM product_localisation")
+    void deleteAll();
 }

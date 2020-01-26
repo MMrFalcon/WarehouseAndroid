@@ -17,7 +17,7 @@ import com.falcon.warehouse.root.Constants;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 
-import java.text.DecimalFormat;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,11 +40,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = productList.get(position);
-        DecimalFormat df = new DecimalFormat("#,###.00");
 
         holder.productIndex.setText("Index Produktu: " + product.getProductIndex());
         holder.productId.setText("ID: " + product.getId());
-        holder.quantity.setText("Ilość: " + df.format(product.getQuantity()));
+        holder.quantity.setText("Ilość: " + product.getQuantity().toString());
         holder.productName.setText("Nazwa: " + product.getProductName());
 
     }
@@ -92,6 +91,23 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 productAddEditFragment.setArguments(bundle);
 
                 ((NavigationHost) productListFragment.getActivity()).navigateTo(productAddEditFragment, true);
+            });
+
+            remove.setOnClickListener( v -> {
+                String productIndexCleanText = productIndex.getText().toString().replace("Index Produktu: ", "");
+                String productIdCleanText = productId.getText().toString().replace("ID: ", "");
+                String productQuantityCleanText = quantity.getText().toString().replace("Ilość: ", "");
+                String productNameCleanText = quantity.getText().toString().replace("Nazwa: ", "");
+
+                Product product = new Product();
+                product.setId(Long.valueOf(productIdCleanText));
+                product.setProductIndex(productIndexCleanText);
+                product.setProductName(productNameCleanText);
+                product.setQuantity(new BigDecimal(productQuantityCleanText));
+
+                productListFragment.getPresenter().removeProduct(product);
+
+                ((NavigationHost) productListFragment.getActivity()).navigateTo(new ProductListFragment(), true);
             });
         }
     }

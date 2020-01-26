@@ -25,7 +25,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/localisationId"
+            android:id="@+id/localisationDetailId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
@@ -33,7 +33,7 @@
             />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/localisationIndex"
+            android:id="@+id/localisationDetailIndex"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
@@ -41,7 +41,7 @@
             />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/localisationName"
+            android:id="@+id/localisationDetailName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"

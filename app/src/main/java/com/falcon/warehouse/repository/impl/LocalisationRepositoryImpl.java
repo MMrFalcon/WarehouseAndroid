@@ -133,6 +133,37 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
         }
     }
 
+    @Override
+    public void deleteLocalisation(Localisation localisation) {
+        try {
+            apiDeleteLocalisation(localisation);
+        } catch (RuntimeException ex) {
+            Log.e("Catching Response", ex.getLocalizedMessage());
+            localisationDao.deleteLocalisation(localisation);
+        }
+    }
+
+    @Override
+    public void deleteAll() {
+        localisationDao.deleteAll();
+    }
+
+    private void apiDeleteLocalisation(Localisation localisation) {
+        executor.execute(() -> localisationService.deleteLocalisation(localisation).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                executor.execute(() -> localisationDao.deleteLocalisation(localisation));
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                throw new RuntimeException("Error in delete response");
+            }
+        }));
+    }
+
     private void apiUpdateLocalisation(Localisation localisation) {
         executor.execute(() -> localisationService.updateLocalisation(localisation).enqueue(new Callback<Localisation>() {
             @Override
@@ -166,6 +197,8 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
                     List<Localisation> localisations = response.body();
 
                     if (localisations != null) {
+                        //cleaning old data in local db
+                        deleteAll();
                         localisations.forEach(localisation -> {
                             localisation.setLastFetchedDate(new Date());
                             localisationDao.saveLocalisation(localisation);
