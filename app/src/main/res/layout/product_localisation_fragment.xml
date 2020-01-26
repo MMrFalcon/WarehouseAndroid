@@ -89,21 +89,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/scanLocalisationButton"
                 app:layout_constraintVertical_bias="1.0" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/addButton"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:padding="20dp"
-                android:text="@string/add"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/scanProductButton"
-                app:layout_constraintHorizontal_bias="0.869"
-                app:layout_constraintStart_toStartOf="@+id/scanProductButton"
-                app:layout_constraintTop_toBottomOf="@+id/scanProductButton"
-                app:layout_constraintVertical_bias="1.0" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

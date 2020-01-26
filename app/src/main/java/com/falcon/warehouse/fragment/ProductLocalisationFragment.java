@@ -23,7 +23,6 @@ public class ProductLocalisationFragment extends Fragment {
     private MaterialButton scanLocalisationButton;
     private MaterialButton scanProductButton;
     private MaterialButton showAllButton;
-    private MaterialButton addButton;
     private MaterialTextView menuTitle;
 
     @Nullable
@@ -36,7 +35,6 @@ public class ProductLocalisationFragment extends Fragment {
         scanLocalisationButton = fragmentView.findViewById(R.id.scanLocalisationButton);
         scanProductButton = fragmentView.findViewById(R.id.scanProductButton);
         showAllButton = fragmentView.findViewById(R.id.showAllButton);
-        addButton = fragmentView.findViewById(R.id.addButton);
         menuTitle = fragmentView.findViewById(R.id.menuTitle);
 
 
