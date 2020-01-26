@@ -8,6 +8,7 @@ import androidx.room.Query;
 import com.falcon.warehouse.entity.Product;
 
 import java.util.Date;
+import java.util.List;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -25,5 +26,8 @@ public interface ProductDao {
 
     @Query("SELECT * FROM product ORDER BY last_fetched_date LIMIT 1")
     LiveData<Product> getLastFetchedProduct();
+
+    @Query("SELECT * FROM product ORDER BY product_id")
+    LiveData<List<Product>> getAll();
 
 }

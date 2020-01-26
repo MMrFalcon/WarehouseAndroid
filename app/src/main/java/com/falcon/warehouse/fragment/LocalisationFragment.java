@@ -40,6 +40,9 @@ public class LocalisationFragment extends Fragment {
         scanButton.setOnClickListener( v -> ((NavigationHost) getActivity())
                 .navigateTo(new LocalisationScannerFragment(), true));
 
+        showAllButton.setOnClickListener(v -> ((NavigationHost) getActivity())
+                .navigateTo(new LocalisationListFragment(), true));
+
         return view;
     }
 }

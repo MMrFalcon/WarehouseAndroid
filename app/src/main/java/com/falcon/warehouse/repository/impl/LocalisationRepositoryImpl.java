@@ -10,6 +10,7 @@ import com.falcon.warehouse.repository.LocalisationRepository;
 import com.falcon.warehouse.service.LocalisationService;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -61,6 +62,40 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
     @Override
     public LiveData<Localisation> getLastFetchedLocalisation() {
         return localisationDao.getLastFetchedLocalisation();
+    }
+
+    @Override
+    public LiveData<List<Localisation>> getAll() {
+        fetchAllLocalisations();
+        return localisationDao.getAll();
+    }
+
+    private void fetchAllLocalisations() {
+        executor.execute(() -> {
+            localisationService.getAllLocalisations().enqueue(new Callback<List<Localisation>>() {
+                @Override
+                public void onResponse(Call<List<Localisation>> call, Response<List<Localisation>> response) {
+                    executor.execute(() -> {
+                        List<Localisation> localisations = response.body();
+
+                        if (localisations != null) {
+                            localisations.forEach(localisation -> {
+                                localisation.setLastFetchedDate(new Date());
+                                localisationDao.saveLocalisation(localisation);
+                            });
+                        }else {
+                            Log.i("NULL_OBJECT", "Localisation is null");
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<List<Localisation>> call, Throwable t) {
+                    Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                    Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                }
+            });
+        });
     }
 
     private void fetchLocalisationByIndex(final String localisationIndex) {

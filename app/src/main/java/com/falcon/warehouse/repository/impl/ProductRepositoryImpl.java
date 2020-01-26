@@ -10,6 +10,7 @@ import com.falcon.warehouse.repository.ProductRepository;
 import com.falcon.warehouse.service.ProductService;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -90,6 +91,40 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
     @Override
     public LiveData<Product> getLastFetchedProduct() {
         return productDao.getLastFetchedProduct();
+    }
+
+    @Override
+    public LiveData<List<Product>> getAll() {
+        fetchAllProducts();
+        return productDao.getAll();
+    }
+
+    private void fetchAllProducts() {
+        executor.execute(() -> {
+            productService.geAllProducts().enqueue(new Callback<List<Product>>() {
+                @Override
+                public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                    executor.execute(() -> {
+                        List<Product> products = response.body();
+
+                        if (products != null) {
+                            products.forEach(product -> {
+                                product.setLastFetchedDate(new Date());
+                                productDao.saveProduct(product);
+                            });
+                        }else {
+                            Log.i("NULL_OBJECT", "Product is null");
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<List<Product>> call, Throwable t) {
+                    Log.i("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                    Log.i("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                }
+            });
+        });
     }
 
 }

@@ -39,6 +39,9 @@ public class ProductFragment extends Fragment {
         scanButton.setOnClickListener( v -> ((NavigationHost) getActivity())
                 .navigateTo(new ProductScannerFragment(), true));
 
+        showAllButton.setOnClickListener(v -> ((NavigationHost) getActivity())
+                .navigateTo(new ProductListFragment(), true));
+
         return view;
     }
 }

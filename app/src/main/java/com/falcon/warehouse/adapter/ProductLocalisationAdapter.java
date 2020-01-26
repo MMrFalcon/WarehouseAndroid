@@ -21,7 +21,7 @@ public class ProductLocalisationAdapter extends RecyclerView.Adapter<ProductLoca
     private List<ProductLocalisation> productLocalisations;
 
     public ProductLocalisationAdapter() {
-        productLocalisations = new ArrayList<>();
+        this.productLocalisations = new ArrayList<>();
     }
 
     @NonNull
@@ -59,7 +59,7 @@ public class ProductLocalisationAdapter extends RecyclerView.Adapter<ProductLoca
         public MaterialTextView localisationIndex;
         public MaterialTextView productLocalisationId;
         public MaterialTextView quantity;
-        public MaterialButton add;
+        public MaterialButton edit;
         public MaterialButton remove;
 
         public ViewHolder(@NonNull View itemView) {
@@ -68,7 +68,7 @@ public class ProductLocalisationAdapter extends RecyclerView.Adapter<ProductLoca
             productIndex = itemView.findViewById(R.id.prodIndex);
             localisationIndex = itemView.findViewById(R.id.locIndex);
             quantity = itemView.findViewById(R.id.prodLocQuantity);
-            add = itemView.findViewById(R.id.editProdLoc);
+            edit = itemView.findViewById(R.id.editProdLoc);
             remove = itemView.findViewById(R.id.removeProdLoc);
             productLocalisationId = itemView.findViewById(R.id.prodLocId);
         }

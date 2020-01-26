@@ -8,6 +8,7 @@ import androidx.room.Query;
 import com.falcon.warehouse.entity.Localisation;
 
 import java.util.Date;
+import java.util.List;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -25,4 +26,7 @@ public interface LocalisationDao {
 
     @Query("SELECT * FROM localisation ORDER BY last_fetched_date LIMIT 1")
     LiveData<Localisation> getLastFetchedLocalisation();
+
+    @Query("SELECT * FROM localisation ORDER BY localisation_id")
+    LiveData<List<Localisation>> getAll();
 }

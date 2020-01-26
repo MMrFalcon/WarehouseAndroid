@@ -1,10 +1,13 @@
 package com.falcon.warehouse.module;
 
 import com.falcon.warehouse.contract.ILocalisationDetailContract;
+import com.falcon.warehouse.contract.ILocalisationListContract;
 import com.falcon.warehouse.contract.ILocalisationScannerContract;
 import com.falcon.warehouse.model.LocalisationDetailModel;
+import com.falcon.warehouse.model.LocalisationListModel;
 import com.falcon.warehouse.model.LocalisationScannerModel;
 import com.falcon.warehouse.presenter.LocalisationDetailPresenter;
+import com.falcon.warehouse.presenter.LocalisationListPresenter;
 import com.falcon.warehouse.presenter.LocalisationScannerPresenter;
 import com.falcon.warehouse.repository.LocalisationRepository;
 
@@ -38,5 +41,17 @@ public class LocalisationModule {
     @Provides
     public  ILocalisationScannerContract.Model provideLocalisationScannerModel(LocalisationRepository localisationRepository) {
         return new LocalisationScannerModel(localisationRepository);
+    }
+
+    @Singleton
+    @Provides
+    public ILocalisationListContract.Presenter provideLocalisationListModel(ILocalisationListContract.Model model) {
+        return new LocalisationListPresenter(model);
+    }
+
+    @Singleton
+    @Provides
+    public  ILocalisationListContract.Model provideLocalistionListModel(LocalisationRepository localisationRepository) {
+        return new LocalisationListModel(localisationRepository);
     }
 }
