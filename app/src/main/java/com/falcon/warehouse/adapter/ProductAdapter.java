@@ -70,6 +70,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         public MaterialTextView quantity;
         public MaterialButton edit;
         public MaterialButton remove;
+        public MaterialButton addLocalisationToProduct;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +81,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             quantity = itemView.findViewById(R.id.productQuantity);
             edit = itemView.findViewById(R.id.editProd);
             remove = itemView.findViewById(R.id.removeProd);
+            addLocalisationToProduct = itemView.findViewById(R.id.addLocToProd);
 
             edit.setOnClickListener(v -> {
                 Bundle bundle = new Bundle();
@@ -109,6 +111,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
                 ((NavigationHost) productListFragment.getActivity()).navigateTo(new ProductListFragment(), true);
             });
+
+           addLocalisationToProduct.setVisibility(View.GONE);
         }
+
     }
 }

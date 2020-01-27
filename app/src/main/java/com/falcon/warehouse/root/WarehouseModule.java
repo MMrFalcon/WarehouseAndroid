@@ -78,8 +78,8 @@ public class WarehouseModule {
     @Provides
     public LocalisationRepository provideLocalisationRepo(LocalisationDao localisationDao,
                                                           LocalisationService localisationService,
-                                                          Executor executor) {
-        return new LocalisationRepositoryImpl(localisationDao, localisationService, executor);
+                                                          Executor executor, ProductService productService) {
+        return new LocalisationRepositoryImpl(localisationDao, localisationService, executor, productService);
     }
 
     @Singleton
@@ -96,8 +96,9 @@ public class WarehouseModule {
 
     @Singleton
     @Provides
-    public ProductRepository provideProductRepo(ProductDao productDao, ProductService productService, Executor executor) {
-        return new ProductRepositoryImpl(productDao, productService, executor);
+    public ProductRepository provideProductRepo(ProductDao productDao, ProductService productService, Executor executor,
+                                                LocalisationService localisationService) {
+        return new ProductRepositoryImpl(productDao, productService, executor, localisationService);
     }
 
     @Singleton

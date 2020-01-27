@@ -6,9 +6,12 @@ import androidx.lifecycle.LiveData;
 
 import com.falcon.warehouse.dao.LocalisationDao;
 import com.falcon.warehouse.entity.Localisation;
+import com.falcon.warehouse.entity.Product;
 import com.falcon.warehouse.repository.LocalisationRepository;
 import com.falcon.warehouse.service.LocalisationService;
+import com.falcon.warehouse.service.ProductService;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -24,12 +27,15 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
     private final LocalisationDao localisationDao;
     private final LocalisationService localisationService;
     private final Executor executor;
+    private final ProductService productService;
 
     @Inject
-    public LocalisationRepositoryImpl(LocalisationDao localisationDao, LocalisationService localisationService, Executor executor) {
+    public LocalisationRepositoryImpl(LocalisationDao localisationDao, LocalisationService localisationService,
+                                      Executor executor, ProductService productService) {
         this.localisationDao = localisationDao;
         this.localisationService = localisationService;
         this.executor = executor;
+        this.productService = productService;
     }
 
     /**
@@ -98,7 +104,7 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
      * Method checks if data was fetched. Is only for executor call
      *
      * @param localisationIndex index of localisation
-     * @param lastRefreshMax Date of last refresh -3 minutes
+     * @param lastRefreshMax    Date of last refresh -3 minutes
      * @return localisation if exists or null
      */
     @Override
@@ -203,7 +209,7 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
                             localisation.setLastFetchedDate(new Date());
                             localisationDao.saveLocalisation(localisation);
                         });
-                    }else {
+                    } else {
                         Log.e("NULL_OBJECT", "Localisation is null");
                     }
                 });
@@ -218,9 +224,9 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
     }
 
     private void fetchLocalisationByIndex(final String localisationIndex) {
-        executor.execute(() ->{
+        executor.execute(() -> {
             boolean isRefreshTime = (localisationDao
-                    .fetchedLocalisation(localisationIndex, getMaxRefreshTime(new Date()))== null);
+                    .fetchedLocalisation(localisationIndex, getMaxRefreshTime(new Date())) == null);
 
             if (isRefreshTime) {
                 localisationService.getLocalisationByIndex(localisationIndex).enqueue(new Callback<Localisation>() {
@@ -248,4 +254,45 @@ public class LocalisationRepositoryImpl extends BaseRepositoryImpl implements Lo
         });
     }
 
+    @Override
+    public void addProductToLocalisation(String localisationIndex, String productIndex, BigDecimal quantity) {
+        executor.execute(() -> productService.getProductByIndex(productIndex).enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                executor.execute(() -> {
+                    Product product = response.body();
+
+                    if (product != null) {
+                        executor.execute(() -> localisationService
+                                .addProductToLocalisation(localisationIndex, quantity.toString(), product)
+                                .enqueue(new Callback<Localisation>() {
+                                    @Override
+                                    public void onResponse(Call<Localisation> call, Response<Localisation> response) {
+                                        executor.execute(() -> {
+                                            Localisation localisation = response.body();
+                                            if (localisation == null) {
+                                                Log.e("NULL_OBJECT", "Localisation is null");
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Localisation> call, Throwable t) {
+                                        Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                                        Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                                    }
+                                }));
+                    } else {
+                        Log.e("NULL_OBJECT", "Product is null");
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+            }
+        }));
+    }
 }

@@ -67,6 +67,7 @@ public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapte
         public MaterialTextView localisationName;
         public MaterialButton edit;
         public MaterialButton remove;
+        public MaterialButton addProdToLoc;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +77,7 @@ public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapte
             localisationName = itemView.findViewById(R.id.localisationDetailName);
             edit = itemView.findViewById(R.id.editLoc);
             remove = itemView.findViewById(R.id.removeLoc);
+            addProdToLoc = itemView.findViewById(R.id.addProdToLoc);
 
             edit.setOnClickListener(v -> {
                 String localisationIndexCleanText = localisationIndex.getText().toString().replace("Index Lokalizacji: ", "");
@@ -104,6 +106,8 @@ public class LocalisationAdapter extends RecyclerView.Adapter<LocalisationAdapte
                 ((NavigationHost) localisationListFragment.getActivity()).navigateTo(new LocalisationListFragment(), true);
 
             });
+
+            addProdToLoc.setVisibility(View.GONE);
         }
     }
 }

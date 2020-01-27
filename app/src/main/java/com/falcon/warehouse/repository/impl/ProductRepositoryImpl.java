@@ -5,10 +5,13 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.falcon.warehouse.dao.ProductDao;
+import com.falcon.warehouse.entity.Localisation;
 import com.falcon.warehouse.entity.Product;
 import com.falcon.warehouse.repository.ProductRepository;
+import com.falcon.warehouse.service.LocalisationService;
 import com.falcon.warehouse.service.ProductService;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -24,12 +27,15 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
     private final ProductDao productDao;
     private final ProductService productService;
     private final Executor executor;
+    private final LocalisationService localisationService;
 
     @Inject
-    public ProductRepositoryImpl(ProductDao productDao, ProductService productService, Executor executor) {
+    public ProductRepositoryImpl(ProductDao productDao, ProductService productService, Executor executor,
+                                 LocalisationService localisationService) {
         this.productDao = productDao;
         this.productService = productService;
         this.executor = executor;
+        this.localisationService = localisationService;
     }
 
     /**
@@ -246,4 +252,43 @@ public class ProductRepositoryImpl extends BaseRepositoryImpl implements Product
         }));
     }
 
+    @Override
+    public void addLocalisationToProduct(String productIndex, String localisationIndex, BigDecimal quantity) {
+        executor.execute(() -> localisationService.getLocalisationByIndex(localisationIndex).enqueue(new Callback<Localisation>() {
+            @Override
+            public void onResponse(Call<Localisation> call, Response<Localisation> response) {
+                executor.execute(() -> {
+                    Localisation localisation = response.body();
+
+                    if (localisation!= null) {
+                        executor.execute(() -> productService.addLocalisation(productIndex, quantity.toString(), localisation).enqueue(new Callback<Product>() {
+                            @Override
+                            public void onResponse(Call<Product> call, Response<Product> response) {
+                                executor.execute(() -> {
+                                    if (response.body() == null) {
+                                        Log.e("NULL_OBJECT", "Product is null");
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Call<Product> call, Throwable t) {
+                                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+                            }
+                        }));
+                    } else {
+                        Log.e("NULL_OBJECT", "Localisation is null");
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call<Localisation> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+            }
+        }));
+    }
 }

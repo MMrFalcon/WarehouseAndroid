@@ -178,7 +178,7 @@ public class ProductLocalisationRepositoryImpl extends BaseRepositoryImpl implem
                             productLocalisationDao.saveProductLocalisation(productLocalisation);
                         });
                     } else {
-                        Log.i("NULL_OBJECT", "ProductLocalisation is null");
+                        Log.e("NULL_OBJECT", "ProductLocalisation is null");
                     }
                 });
             }

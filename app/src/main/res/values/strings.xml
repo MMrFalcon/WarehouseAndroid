@@ -19,4 +19,6 @@
     <string name="name">Nazwa</string>
     <string name="quantity">Ilość</string>
     <string name="save">Zapisz</string>
+    <string name="addProdToLOC">Dodaj Produkt</string>
+    <string name="addLocToProd">Dodaj Lokalizację</string>
 </resources>

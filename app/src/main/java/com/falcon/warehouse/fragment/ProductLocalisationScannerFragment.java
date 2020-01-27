@@ -68,20 +68,38 @@ public class ProductLocalisationScannerFragment extends Fragment implements ZXin
 
     @Override
     public void onPause() {
-        super.onPause();
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
         mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
+        super.onPause();
     }
 
     @Override
     public void onDestroy() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
         super.onDestroy();
     }
 
-
     @Override
     public void onDestroyView() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
         super.onDestroyView();
-        presenter.detachView(this);
+    }
+
+    @Override
+    public void onStop() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
+        super.onStop();
     }
 
     @Override

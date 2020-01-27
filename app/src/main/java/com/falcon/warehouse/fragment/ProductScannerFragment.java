@@ -24,6 +24,7 @@ import com.falcon.warehouse.root.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.Result;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -70,20 +71,38 @@ public class ProductScannerFragment extends Fragment implements ZXingScannerView
 
     @Override
     public void onPause() {
-        super.onPause();
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
         mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
+        super.onPause();
     }
 
     @Override
     public void onDestroy() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
         super.onDestroy();
     }
 
-
     @Override
     public void onDestroyView() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
         super.onDestroyView();
-        presenter.detachView(this);
+    }
+
+    @Override
+    public void onStop() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
+        super.onStop();
     }
 
     @Override
@@ -92,16 +111,46 @@ public class ProductScannerFragment extends Fragment implements ZXingScannerView
         Log.v("tag", rawResult.getBarcodeFormat().toString());
 
         setProductIndex(rawResult.getText());
-        presenter.fetchProductByIndex();
 
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.SCAN_PRODUCT_KEY, rawResult.getText());
+        Bundle requestBundle = this.getArguments();
+        if (requestBundle != null) {
+            if (requestBundle.getString(Constants.SCAN_TYPE_KEY).equals(Constants.ADD_PRODUCT_TO_LOCALISATION)) {
+                BigDecimal quantity = new BigDecimal(requestBundle.getString(Constants.QUANTITY));
+                String localisationIndex = requestBundle.getString(Constants.PROD_LOCALISATION_INDEX_KEY);
+                presenter.addLocalisationToProduct(localisationIndex, quantity);
 
-        ProductDetailFragment productDetailFragment = new ProductDetailFragment();
-        productDetailFragment.setArguments(bundle);
+                ProductLocalisationListFragment productLocalisationListFragment = new ProductLocalisationListFragment();
 
-        ((NavigationHost) getActivity())
-                .navigateTo(productDetailFragment, false);
+                ((NavigationHost) getActivity())
+                        .navigateTo(productLocalisationListFragment, false);
+
+            } else {
+                presenter.fetchProductByIndex();
+
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.SCAN_PRODUCT_KEY, rawResult.getText());
+
+                ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+                productDetailFragment.setArguments(bundle);
+
+                ((NavigationHost) getActivity())
+                        .navigateTo(productDetailFragment, false);
+            }
+        } else {
+            presenter.fetchProductByIndex();
+
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.SCAN_PRODUCT_KEY, rawResult.getText());
+
+            ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+            productDetailFragment.setArguments(bundle);
+
+            ((NavigationHost) getActivity())
+                    .navigateTo(productDetailFragment, false);
+        }
+
+
+
     }
 
     private void checkCameraPermission(Activity activity) {

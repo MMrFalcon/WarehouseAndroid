@@ -68,6 +68,8 @@ public class ProductLocalisationListFragment extends Fragment implements IProduc
     @Override
     public void onResume() {
         super.onResume();
+        //refresh list from api
+        presenter.fillList();
         presenter.attachView(this);
     }
 

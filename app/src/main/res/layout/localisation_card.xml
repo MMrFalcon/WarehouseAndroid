@@ -24,6 +24,7 @@
             android:text="@string/localisation_detail_info_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
 
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/localisationDetailId"
             android:layout_width="wrap_content"
@@ -31,6 +32,7 @@
             android:layout_marginEnd="12dp"
             android:padding="20dp"
             />
+
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/localisationDetailIndex"
@@ -47,6 +49,14 @@
             android:layout_marginEnd="12dp"
             android:padding="20dp"
             />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/addProdToLoc"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:textSize="12sp"
+            android:text="@string/addProdToLOC" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

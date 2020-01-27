@@ -24,6 +24,7 @@ import com.falcon.warehouse.root.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.zxing.Result;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -45,7 +46,6 @@ ILocalisationScannerContract.View{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         ((App) this.getActivity().getApplication()).getComponent().inject(this);
-
         View fragmentView = inflater.inflate(R.layout.scanner_fragment, container, false);
 
         presenter.attachView(this);
@@ -71,19 +71,38 @@ ILocalisationScannerContract.View{
 
     @Override
     public void onPause() {
-        super.onPause();
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
         mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
+        super.onPause();
     }
 
     @Override
     public void onDestroy() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
         super.onDestroy();
     }
 
     @Override
     public void onDestroyView() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
         super.onDestroyView();
-        presenter.detachView(this);
+    }
+
+    @Override
+    public void onStop() {
+        mScannerView.setResultHandler(null);
+        mScannerView.stopCameraPreview(); //stopPreview
+        mScannerView.stopCamera();
+        mScannerView.destroyDrawingCache();
+        super.onStop();
     }
 
     @Override
@@ -92,16 +111,43 @@ ILocalisationScannerContract.View{
         Log.v("tag", rawResult.getBarcodeFormat().toString());
 
         setLocalisationIndex(rawResult.getText());
-        presenter.fetchLocalisationByIndex();
 
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.SCAN_LOCALISATION_KEY, rawResult.getText());
+        Bundle requestBundle = this.getArguments();
+        if (requestBundle != null) {
+            if (requestBundle.getString(Constants.SCAN_TYPE_KEY).equals(Constants.ADD_LOCALISATION_TO_PRODUCT)) {
+                BigDecimal quantity = new BigDecimal(requestBundle.getString(Constants.QUANTITY));
+                String productIndex = requestBundle.getString(Constants.PROD_PRODUCT_INDEX_KEY);
+                presenter.addProductToLocalisation(productIndex, quantity);
 
-        LocalisationDetailFragment localisationDetailFragment = new LocalisationDetailFragment();
-        localisationDetailFragment.setArguments(bundle);
+                ProductLocalisationListFragment productLocalisationListFragment = new ProductLocalisationListFragment();
 
-        ((NavigationHost) getActivity())
-                .navigateTo(localisationDetailFragment, false);
+                ((NavigationHost) getActivity())
+                        .navigateTo(productLocalisationListFragment, false);
+            } else {
+                presenter.fetchLocalisationByIndex();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.SCAN_LOCALISATION_KEY, rawResult.getText());
+
+                LocalisationDetailFragment localisationDetailFragment = new LocalisationDetailFragment();
+                localisationDetailFragment.setArguments(bundle);
+
+                ((NavigationHost) getActivity())
+                        .navigateTo(localisationDetailFragment, false);
+            }
+        } else {
+            presenter.fetchLocalisationByIndex();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.SCAN_LOCALISATION_KEY, rawResult.getText());
+
+            LocalisationDetailFragment localisationDetailFragment = new LocalisationDetailFragment();
+            localisationDetailFragment.setArguments(bundle);
+
+            ((NavigationHost) getActivity())
+                    .navigateTo(localisationDetailFragment, false);
+        }
+
+        getFragmentManager().beginTransaction().remove(this).commitAllowingStateLoss();
+
     }
 
     private void checkCameraPermission(Activity activity) {

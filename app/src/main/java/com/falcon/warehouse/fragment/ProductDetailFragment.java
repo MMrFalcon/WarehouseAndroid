@@ -1,6 +1,7 @@
 package com.falcon.warehouse.fragment;
 
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,12 @@ import com.falcon.warehouse.entity.Product;
 import com.falcon.warehouse.root.App;
 import com.falcon.warehouse.root.Constants;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -31,6 +35,7 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
     private MaterialTextView productQuantity;
     private MaterialButton edit;
     private MaterialButton delete;
+    private MaterialButton addLocalisation;
 
     @Inject
     IProductDetailContract.Presenter presenter;
@@ -49,6 +54,7 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
         productQuantity = fragmentView.findViewById(R.id.productQuantity);
         edit = fragmentView.findViewById(R.id.editProd);
         delete = fragmentView.findViewById(R.id.removeProd);
+        addLocalisation =  fragmentView.findViewById(R.id.addLocToProd);
 
         //update by index or fetch last scanned data
         Bundle bundle = this.getArguments();
@@ -76,7 +82,41 @@ public class ProductDetailFragment extends Fragment implements IProductDetailCon
             ((NavigationHost) getActivity()).navigateTo(new ProductListFragment(), false);
         });
 
+        addLocalisation.setOnClickListener(v -> showPopupWindow());
+
         return fragmentView;
+    }
+
+    private void showPopupWindow() {
+        final TextInputEditText quantity = new TextInputEditText(this.getContext());
+        quantity.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        MaterialAlertDialogBuilder alertDialogBuilder = new MaterialAlertDialogBuilder(this.getContext());
+        alertDialogBuilder.setView(quantity);
+        alertDialogBuilder.setTitle("Podaj Ilość");
+        alertDialogBuilder.setPositiveButton("Skanuj Lokalizacje", (dialog, which) -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.SCAN_TYPE_KEY, Constants.ADD_LOCALISATION_TO_PRODUCT);
+            bundle.putString(Constants.QUANTITY, Objects.requireNonNull(quantity.getText()).toString());
+            bundle.putString(Constants.PROD_PRODUCT_INDEX_KEY, getProductIndex());
+
+            LocalisationScannerFragment localisationScannerFragment = new LocalisationScannerFragment();
+            localisationScannerFragment.setArguments(bundle);
+
+            ((NavigationHost)getActivity()).navigateTo(localisationScannerFragment, false);
+        });
+
+        alertDialogBuilder.setNegativeButton("Wróć", ((dialog, which) -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.SCAN_PRODUCT_KEY, getProductIndex());
+
+            ProductDetailFragment productDetailFragment = new ProductDetailFragment();
+            productDetailFragment.setArguments(bundle);
+
+            ((NavigationHost)getActivity()).navigateTo(productDetailFragment, true);
+        }));
+
+        alertDialogBuilder.show();
     }
 
     @Override

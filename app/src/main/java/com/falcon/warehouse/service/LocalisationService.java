@@ -1,6 +1,7 @@
 package com.falcon.warehouse.service;
 
 import com.falcon.warehouse.entity.Localisation;
+import com.falcon.warehouse.entity.Product;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import retrofit2.http.HTTP;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface LocalisationService {
 
@@ -28,4 +30,8 @@ public interface LocalisationService {
 
     @HTTP(method = "DELETE", path = "localisation", hasBody = true)
     Call<Void> deleteLocalisation(@Body Localisation localisation);
+
+    @PUT("localisation/add/product")
+    Call<Localisation> addProductToLocalisation(@Query("localisationIndex") String localisationIndex, @Query("quantity") String quantity,
+                                       @Body Product product);
 }
