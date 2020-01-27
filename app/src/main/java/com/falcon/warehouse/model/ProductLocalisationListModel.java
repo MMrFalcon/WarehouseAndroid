@@ -30,4 +30,9 @@ public class ProductLocalisationListModel implements IProductLocalisationListCon
     public LiveData<List<ProductLocalisation>> getAll() {
         return productLocalisationRepository.getAll();
     }
+
+    @Override
+    public void updateProductLocalisation(ProductLocalisation productLocalisation) {
+        productLocalisationRepository.updateProductLocalisation(productLocalisation);
+    }
 }

@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.falcon.warehouse.entity.ProductLocalisation;
 
@@ -42,4 +43,7 @@ public interface ProductLocalisationDao {
 
     @Query("DELETE FROM product_localisation")
     void deleteAll();
+
+    @Update(onConflict = REPLACE)
+    void updateProductLocalisationLocally(ProductLocalisation productLocalisation);
 }

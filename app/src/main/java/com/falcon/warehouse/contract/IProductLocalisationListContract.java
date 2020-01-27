@@ -12,6 +12,7 @@ public interface IProductLocalisationListContract {
         LiveData<List<ProductLocalisation>> getByProductIndex(String productIndex);
         LiveData<List<ProductLocalisation>> getByLocalisationIndex(String localisationIndex);
         LiveData<List<ProductLocalisation>> getAll();
+        void updateProductLocalisation(ProductLocalisation productLocalisation);
     }
 
     interface View {
@@ -22,6 +23,7 @@ public interface IProductLocalisationListContract {
         void fillListByProductIndex(String productIndex);
         void fillListByLocalisationIndex(String localisationIndex);
         void fillList();
+        void updateProductLocalisation(ProductLocalisation productLocalisation);
     }
 
 }

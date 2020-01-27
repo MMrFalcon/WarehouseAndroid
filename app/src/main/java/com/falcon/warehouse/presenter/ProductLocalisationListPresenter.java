@@ -34,4 +34,9 @@ public class ProductLocalisationListPresenter extends BasePresenterImpl<IProduct
         LiveData<List<ProductLocalisation>> productLocalisations = model.getAll();
         view.addItems(productLocalisations);
     }
+
+    @Override
+    public void updateProductLocalisation(ProductLocalisation productLocalisation) {
+        model.updateProductLocalisation(productLocalisation);
+    }
 }

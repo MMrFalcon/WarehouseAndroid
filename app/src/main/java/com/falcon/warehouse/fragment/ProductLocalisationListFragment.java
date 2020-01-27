@@ -41,6 +41,7 @@ public class ProductLocalisationListFragment extends Fragment implements IProduc
         View fragmentView = inflater.inflate(R.layout.recycle_layout, container, false);
 
         presenter.attachView(this);
+        productLocalisationAdapter.attachFragment(this);
 
         recyclerView = fragmentView.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(productLocalisationAdapter);
@@ -65,11 +66,16 @@ public class ProductLocalisationListFragment extends Fragment implements IProduc
         return fragmentView;
     }
 
+    public IProductLocalisationListContract.Presenter getPresenter() {
+        return this.presenter;
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         //refresh list from api
         presenter.fillList();
+        productLocalisationAdapter.attachFragment(this);
         presenter.attachView(this);
     }
 

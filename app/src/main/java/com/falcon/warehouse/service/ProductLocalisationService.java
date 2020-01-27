@@ -8,6 +8,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ProductLocalisationService {
@@ -23,4 +24,7 @@ public interface ProductLocalisationService {
 
     @HTTP(method = "DELETE", path = "productLocalisation", hasBody = true)
     Call<Void> delete(@Body ProductLocalisation productLocalisation);
+
+    @PUT("productLocalisation")
+    Call<ProductLocalisation> updateLocalisation(@Body ProductLocalisation productLocalisation);
 }

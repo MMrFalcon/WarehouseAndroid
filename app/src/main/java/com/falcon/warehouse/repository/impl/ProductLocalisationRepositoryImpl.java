@@ -147,6 +147,11 @@ public class ProductLocalisationRepositoryImpl extends BaseRepositoryImpl implem
         productLocalisationDao.deleteAll();
     }
 
+    @Override
+    public void updateProductLocalisationLocally(ProductLocalisation productLocalisation) {
+        productLocalisationDao.updateProductLocalisationLocally(productLocalisation);
+    }
+
     private void apiDelete(ProductLocalisation productLocalisation) {
         executor.execute(() -> productLocalisationService.delete(productLocalisation).enqueue(new Callback<Void>() {
             @Override
@@ -191,4 +196,28 @@ public class ProductLocalisationRepositoryImpl extends BaseRepositoryImpl implem
         }));
     }
 
+    @Override
+    public void updateProductLocalisation(ProductLocalisation productLocalisation) {
+        executor.execute(() -> productLocalisationService.updateLocalisation(productLocalisation).enqueue(new Callback<ProductLocalisation>() {
+            @Override
+            public void onResponse(Call<ProductLocalisation> call, Response<ProductLocalisation> response) {
+                executor.execute(() -> {
+                    ProductLocalisation updatedEntity = response.body();
+
+                    //Update only if api update works
+                    if (updatedEntity != null) {
+                        updateProductLocalisationLocally(updatedEntity);
+                    } else {
+                        Log.e("NULL_OBJECT", "ProductLocalisation is null");
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<ProductLocalisation> call, Throwable t) {
+                Log.e("ERROR_IN_FETCH", call.toString() + t.getLocalizedMessage());
+                Log.e("SKIPPING_DATA_UPDATE", "Fetching data locally");
+            }
+        }));
+    }
 }
